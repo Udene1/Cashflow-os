@@ -101,4 +101,8 @@ const handler=createMcpHandler(()=>{
   return server;
 });
 
-export {handler as GET,handler as POST,handler as DELETE};
+async function handle(request:Request){
+  return handler.fetch(request);
+}
+
+export {handle as GET,handle as POST,handle as DELETE};
