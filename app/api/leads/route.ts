@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { ensureSchema, sql } from "@/lib/db";
+import { ensureSchema, sql } from "../../../lib/db";
 export const runtime="nodejs";
 const statuses=["Found","Contacted","Replied","Qualified","Proposal","Won","Lost"] as const;
 function validStatus(v:unknown){return statuses.includes(v as never)?v as typeof statuses[number]:"Found";}
