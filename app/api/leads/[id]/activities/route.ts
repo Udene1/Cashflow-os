@@ -1,5 +1,5 @@
 import { NextRequest,NextResponse } from "next/server";
-import { ensureSchema,getSql } from "../../../../lib/db";
+import { ensureSchema,getSql } from "../../../../../lib/db";
 export const runtime="nodejs";
 const types=["contact","note","status","proposal","payment"] as const;
 export async function GET(_:NextRequest,{params}:{params:Promise<{id:string}>}){
