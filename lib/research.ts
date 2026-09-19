@@ -9,8 +9,11 @@ export type ResearchInput = {
   sources: Array<{title:string; url:string}>;
 };
 
-export async function ensureResearchSchema() {
-  const sql = getSql();
+let researchSchemaPromise: Promise<void> | undefined;
+export function ensureResearchSchema() {
+  if (!researchSchemaPromise) {
+    researchSchemaPromise = (async () => {
+      const sql = getSql();
   await sql`CREATE TABLE IF NOT EXISTS lead_research (
     id UUID PRIMARY KEY, lead_id UUID NOT NULL REFERENCES leads(id) ON DELETE CASCADE,
     research_summary TEXT NOT NULL DEFAULT '', technical_area TEXT NOT NULL DEFAULT '',
@@ -27,7 +30,10 @@ export async function ensureResearchSchema() {
     input JSONB NOT NULL DEFAULT '{}'::jsonb, result JSONB NOT NULL DEFAULT '{}'::jsonb,
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
   )`;
-  await sql`CREATE INDEX IF NOT EXISTS mcp_audit_lead_idx ON mcp_audit_log(lead_id, created_at DESC)`;
+      await sql`CREATE INDEX IF NOT EXISTS mcp_audit_lead_idx ON mcp_audit_log(lead_id, created_at DESC)`;
+    })();
+  }
+  return researchSchemaPromise;
 }
 
 export async function saveResearch(input: ResearchInput) {
