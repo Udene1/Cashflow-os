@@ -4,7 +4,7 @@ export const runtime="nodejs";
 const statuses=["Found","Contacted","Replied","Qualified","Proposal","Won","Lost"] as const;
 function validStatus(v:unknown){return statuses.includes(v as never)?v as typeof statuses[number]:"Found";}
 export async function GET(){
- try{await ensureSchema();const rows=await sql\`SELECT id,name,company,role,channel,problem,source,status,value,last_contact AS "lastContact",next_action AS "nextAction",notes,created_at AS "createdAt" FROM leads ORDER BY created_at DESC\`;return NextResponse.json(rows)}
+ try{await ensureSchema();const rows=await sql\`SELECT id,name,company,role,channel,problem,source,status,value,last_contact AS "lastContact",next_action AS "nextAction",notes,created_at AS "createdAt",(SELECT COALESCE(SUM(amount),0) FROM lead_activities a WHERE a.lead_id=leads.id AND a.type='payment') AS "cashCollected" FROM leads ORDER BY created_at DESC\`;return NextResponse.json(rows)}
  catch(e){console.error(e);return NextResponse.json({error:"Database unavailable"},{status:500})}
 }
 export async function POST(req:NextRequest){
