@@ -119,6 +119,7 @@ async function collect() {
 
   const unique = new Map<string, NonNullable<ReturnType<typeof normalize>>>();
   for (const job of jobs) {
+    if (!job) continue;
     const existing = unique.get(job.url);
     if (!existing || job.score > existing.score) unique.set(job.url, job);
   }
