@@ -60,9 +60,9 @@ export async function saveResearch(input: ResearchInput) {
       (id,lead_id,research_summary,technical_area,evidence,hypotheses,confidence,potential_problem,target_contacts,why_contact,next_action,sources)
     VALUES
       ${id},${input.leadId},${input.researchSummary},${input.technicalArea},
-      ${JSON.stringify(input.evidence)}`::jsonb,${JSON.stringify(input.hypotheses)}`::jsonb,${input.confidence},
-      ${input.potentialProblem},${JSON.stringify(input.targetContacts)}`::jsonb,${input.whyContact},
-      ${input.nextAction},${JSON.stringify(input.sources)}`::jsonb)
+      ${JSON.stringify(input.evidence)}::jsonb,${JSON.stringify(input.hypotheses)}::jsonb,${input.confidence},
+      ${input.potentialProblem},${JSON.stringify(input.targetContacts)}::jsonb,${input.whyContact},
+      ${input.nextAction},${JSON.stringify(input.sources)}::jsonb)
     RETURNING id,created_at AS "createdAt"
   `;
   return rows[0];
@@ -72,5 +72,5 @@ export async function auditMcp(toolName:string, leadId:string|null, input:unknow
   await ensureResearchSchema();
   const sql = getSql();
   await sql`INSERT INTO mcp_audit_log(id,tool_name,lead_id,input,result)
-    VALUES (${crypto.randomUUID()},${toolName},${leadId},${JSON.stringify(input)}`::jsonb,${JSON.stringify(result)}`::jsonb)`;
+    VALUES (${crypto.randomUUID()},${toolName},${leadId},${JSON.stringify(input)}::jsonb,${JSON.stringify(result)}::jsonb)`;
 }
