@@ -101,12 +101,4 @@ const handler=createMcpHandler(()=>{
   return server;
 });
 
-function authorized(request:Request){
-  const configured=process.env.CASHFLOW_MCP_TOKEN;
-  return !!configured&&request.headers.get("authorization")===`Bearer ${configured}`;
-}
-async function handle(request:Request){
-  if(!authorized(request)) return new Response(JSON.stringify({error:"Unauthorized"}),{status:401,headers:{"content-type":"application/json","www-authenticate":"Bearer"}});
-  return handler.fetch(request);
-}
-export {handle as GET,handle as POST,handle as DELETE};
+export {handler as GET,handler as POST,handler as DELETE};
