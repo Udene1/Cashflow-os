@@ -22,6 +22,10 @@ export function ensureSchema() {
     await sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS decision_maker TEXT NOT NULL DEFAULT ''`;
     await sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS budget TEXT NOT NULL DEFAULT ''`;
     await sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS timeline TEXT NOT NULL DEFAULT ''`;
+    await sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS source_url TEXT NOT NULL DEFAULT ''`;
+    await sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS lead_score INTEGER NOT NULL DEFAULT 0`;
+    await sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS signal TEXT NOT NULL DEFAULT ''`;
+    await sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS discovered_at TIMESTAMPTZ`;
     await sql`CREATE TABLE IF NOT EXISTS lead_activities (
       id UUID PRIMARY KEY, lead_id UUID NOT NULL REFERENCES leads(id) ON DELETE CASCADE,
       type TEXT NOT NULL CHECK (type IN ('contact','note','status','proposal','payment')),
@@ -29,6 +33,8 @@ export function ensureSchema() {
     `;
     await sql`CREATE INDEX IF NOT EXISTS leads_status_idx ON leads(status)`;
     await sql`CREATE INDEX IF NOT EXISTS leads_follow_up_idx ON leads(follow_up_at)`;
+    await sql`CREATE INDEX IF NOT EXISTS leads_score_idx ON leads(lead_score DESC)`;
+    await sql`CREATE UNIQUE INDEX IF NOT EXISTS leads_source_url_idx ON leads(source_url) WHERE source_url <> ''`;
     await sql`CREATE INDEX IF NOT EXISTS activities_lead_idx ON lead_activities(lead_id, created_at DESC)`;
   })();
   return schemaPromise;
