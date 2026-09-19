@@ -5,7 +5,7 @@ const statuses=["Found","Contacted","Replied","Qualified","Proposal","Won","Lost
 function validStatus(v:unknown){return statuses.includes(v as never)?v as typeof statuses[number]:"Found";}
 function clean(v:unknown){return String(v??"").trim();}
 function num(v:unknown){const n=Number(v);return Number.isFinite(n)&&n>=0?n:0;}
-const select=`id,name,company,role,channel,problem,source,status,value,last_contact AS "lastContact",next_action AS "nextAction",follow_up_at AS "followUpAt",urgency,decision_maker AS "decisionMaker",budget,timeline,notes,created_at AS "createdAt",updated_at AS "updatedAt"`;
+const select=`id,name,company,role,channel,problem,source,status,value,last_contact AS "lastContact",next_action AS "nextAction",follow_up_at AS "followUpAt",urgency,decision_maker AS "decisionMaker",budget,timeline,notes,source_url AS "sourceUrl",lead_score AS "leadScore",signal,discovered_at AS "discoveredAt",created_at AS "createdAt",updated_at AS "updatedAt"`;
 export async function GET(){
  try{await ensureSchema();const sql=getSql();const rows=await sql`SELECT ${sql.unsafe(select)},(SELECT COALESCE(SUM(amount),0) FROM lead_activities a WHERE a.lead_id=leads.id AND a.type='payment') AS "cashCollected" FROM leads ORDER BY CASE WHEN follow_up_at IS NOT NULL AND follow_up_at<=NOW() THEN 0 WHEN follow_up_at IS NOT NULL THEN 1 ELSE 2 END,follow_up_at ASC NULLS LAST,created_at DESC`;return NextResponse.json(rows)}
  catch(e){console.error(e);return NextResponse.json({error:"Database unavailable"},{status:500})}
