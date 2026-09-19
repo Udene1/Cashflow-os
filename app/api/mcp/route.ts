@@ -63,7 +63,7 @@ const handler=createMcpHandler(()=>{
     if(!lead[0]) return {content:[{type:"text",text:"Lead not found"}],isError:true};
     if(input.type==="payment"&&!input.amount) return {content:[{type:"text",text:"Payment amount is required"}],isError:true};
     const id=crypto.randomUUID();
-    await sql`INSERT INTO lead_activities(id,lead_id,type,body,amount) VALUES (@@DOLLARBRACE@@id@@DOLLARBRACE@@,${input.leadId},${input.type},${input.body},${input.amount??null})`;
+    await sql`INSERT INTO lead_activities(id,lead_id,type,body,amount) VALUES (${id},${input.leadId},${input.type},${input.body},${input.amount??null})`;
     if(input.type==="payment") await sql`UPDATE leads SET status='Won',last_contact=NOW(),updated_at=NOW() WHERE id=${input.leadId}`;
     if(input.type==="contact") await sql`UPDATE leads SET status=CASE WHEN status='Found' THEN 'Contacted' ELSE status END,last_contact=NOW(),updated_at=NOW() WHERE id=${input.leadId}`;
     const result={saved:true,activityId:id}; await auditMcp("cashflow_add_activity",input.leadId,input,result);
