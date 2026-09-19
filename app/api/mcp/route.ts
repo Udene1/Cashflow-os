@@ -15,9 +15,9 @@ const handler=createMcpHandler(()=>{
     inputSchema:z.object({leadId:z.string().uuid()})
   },async({leadId})=>{
     await ensureSchema(); await ensureResearchSchema(); const sql=getSql();
-    const lead=await sql`SELECT id,name,company,role,channel,problem,source,status,value,last_contact AS "lastContact",next_action AS "nextAction",follow_up_at AS "followUpAt",urgency,decision_maker AS "decisionMaker",budget,timeline,notes,source_url AS "sourceUrl",lead_score AS "leadScore",signal,discovered_at AS "discoveredAt",created_at AS "createdAt",updated_at AS "updatedAt" FROM leads WHERE id=${leadId${`;
+    const lead=await sql`SELECT id,name,company,role,channel,problem,source,status,value,last_contact AS "lastContact",next_action AS "nextAction",follow_up_at AS "followUpAt",urgency,decision_maker AS "decisionMaker",budget,timeline,notes,source_url AS "sourceUrl",lead_score AS "leadScore",signal,discovered_at AS "discoveredAt",created_at AS "createdAt",updated_at AS "updatedAt" FROM leads WHERE id=${leadId}`;
     if(!lead[0]) return {content:[{type:"text",text:JSON.stringify({error:"Lead not found"})}],isError:true};
-    const research=await sql`SELECT id,research_summary AS "researchSummary",technical_area AS "technicalArea",evidence,hypotheses,confidence,potential_problem AS "potentialProblem",target_contacts AS "targetContacts",why_contact AS "whyContact",next_action AS "nextAction",sources,created_at AS "createdAt",updated_at AS "updatedAt" FROM lead_research WHERE lead_id=${leadId${ ORDER BY created_at DESC`;
+    const research=await sql`SELECT id,research_summary AS "researchSummary",technical_area AS "technicalArea",evidence,hypotheses,confidence,potential_problem AS "potentialProblem",target_contacts AS "targetContacts",why_contact AS "whyContact",next_action AS "nextAction",sources,created_at AS "createdAt",updated_at AS "updatedAt" FROM lead_research WHERE lead_id=${leadId} ORDER BY created_at DESC`;
     return {content:[{type:"text",text:JSON.stringify({lead:lead[0],research})}]};
   });
 
@@ -28,7 +28,7 @@ const handler=createMcpHandler(()=>{
     await ensureSchema(); await ensureResearchSchema(); const sql=getSql();
     const rows=await sql`SELECT l.id,l.name,l.company,l.role,l.status,l.lead_score AS "leadScore",l.signal,l.source_url AS "sourceUrl",l.discovered_at AS "discoveredAt"
       FROM leads l WHERE NOT EXISTS (SELECT 1 FROM lead_research r WHERE r.lead_id=l.id)
-      ORDER BY l.lead_score DESC,l.discovered_at DESC NULLS LAST,l.created_at DESC LIMIT ${limit${`;
+      ORDER BY l.lead_score DESC,l.discovered_at DESC NULLS LAST,l.created_at DESC LIMIT ${limit}`;
     return {content:[{type:"text",text:JSON.stringify(rows)}]};
   });
 
@@ -43,10 +43,10 @@ const handler=createMcpHandler(()=>{
       sources:z.array(z.object({title:z.string(),url:z.string().url()})).default([]), confirmation
     })
   },async({confirmation:_,...input})=>{
-    await ensureSchema(); const sql=getSql(); const lead=await sql`SELECT id FROM leads WHERE id=${input.leadId${`;
+    await ensureSchema(); const sql=getSql(); const lead=await sql`SELECT id FROM leads WHERE id=${input.leadId}`;
     if(!lead[0]) return {content:[{type:"text",text:"Lead not found"}],isError:true};
     const saved=await saveResearch(input);
-    if(input.nextAction) await sql`UPDATE leads SET next_action=${input.nextAction${,updated_at=NOW() WHERE id=${input.leadId${`;
+    if(input.nextAction) await sql`UPDATE leads SET next_action=${input.nextAction},updated_at=NOW() WHERE id=${input.leadId}`;
     const result={saved:true,researchId:saved.id,createdAt:saved.createdAt};
     await auditMcp("cashflow_update_research",input.leadId,input,result);
     return {content:[{type:"text",text:JSON.stringify(result)}]};
@@ -59,13 +59,13 @@ const handler=createMcpHandler(()=>{
       body:z.string().min(1), amount:z.number().positive().optional(), confirmation
     })
   },async({confirmation:_,...input})=>{
-    await ensureSchema(); const sql=getSql(); const lead=await sql`SELECT id FROM leads WHERE id=${input.leadId${`;
+    await ensureSchema(); const sql=getSql(); const lead=await sql`SELECT id FROM leads WHERE id=${input.leadId}`;
     if(!lead[0]) return {content:[{type:"text",text:"Lead not found"}],isError:true};
     if(input.type==="payment"&&!input.amount) return {content:[{type:"text",text:"Payment amount is required"}],isError:true};
     const id=crypto.randomUUID();
-    await sql`INSERT INTO lead_activities(id,lead_id,type,body,amount) VALUES (@@DOLLARBRACE@@id@@DOLLARBRACE@@,${input.leadId${,${input.type${,${input.body${,${input.amount??null${)`;
-    if(input.type==="payment") await sql`UPDATE leads SET status='Won',last_contact=NOW(),updated_at=NOW() WHERE id=${input.leadId${`;
-    if(input.type==="contact") await sql`UPDATE leads SET status=CASE WHEN status='Found' THEN 'Contacted' ELSE status END,last_contact=NOW(),updated_at=NOW() WHERE id=${input.leadId${`;
+    await sql`INSERT INTO lead_activities(id,lead_id,type,body,amount) VALUES (@@DOLLARBRACE@@id@@DOLLARBRACE@@,${input.leadId},${input.type},${input.body},${input.amount??null})`;
+    if(input.type==="payment") await sql`UPDATE leads SET status='Won',last_contact=NOW(),updated_at=NOW() WHERE id=${input.leadId}`;
+    if(input.type==="contact") await sql`UPDATE leads SET status=CASE WHEN status='Found' THEN 'Contacted' ELSE status END,last_contact=NOW(),updated_at=NOW() WHERE id=${input.leadId}`;
     const result={saved:true,activityId:id}; await auditMcp("cashflow_add_activity",input.leadId,input,result);
     return {content:[{type:"text",text:JSON.stringify(result)}]};
   });
@@ -78,7 +78,7 @@ const handler=createMcpHandler(()=>{
     })
   },async({confirmation:_,...input})=>{
     await ensureSchema(); const sql=getSql();
-    const rows=await sql`UPDATE leads SET next_action=${input.nextAction${,follow_up_at=${(input.followUpAt?new Date(input.followUpAt):null)${,updated_at=NOW() WHERE id=${input.leadId${ RETURNING id,next_action AS "nextAction",follow_up_at AS "followUpAt"`;
+    const rows=await sql`UPDATE leads SET next_action=${input.nextAction},follow_up_at=${(input.followUpAt?new Date(input.followUpAt):null)},updated_at=NOW() WHERE id=${input.leadId} RETURNING id,next_action AS "nextAction",follow_up_at AS "followUpAt"`;
     if(!rows[0]) return {content:[{type:"text",text:"Lead not found"}],isError:true};
     const result={saved:true,lead:rows[0]}; await auditMcp("cashflow_set_next_action",input.leadId,input,result);
     return {content:[{type:"text",text:JSON.stringify(result)}]};
@@ -92,7 +92,7 @@ const handler=createMcpHandler(()=>{
     })
   },async({confirmation:_,...input})=>{
     await ensureSchema(); const sql=getSql();
-    const rows=await sql`UPDATE leads SET name=${input.name${,role=${input.role${,channel=${input.channel${,decision_maker=${input.decisionMaker${,updated_at=NOW() WHERE id=${input.leadId${ RETURNING id,name,role,channel,decision_maker AS "decisionMaker"`;
+    const rows=await sql`UPDATE leads SET name=${input.name},role=${input.role},channel=${input.channel},decision_maker=${input.decisionMaker},updated_at=NOW() WHERE id=${input.leadId} RETURNING id,name,role,channel,decision_maker AS "decisionMaker"`;
     if(!rows[0]) return {content:[{type:"text",text:"Lead not found"}],isError:true};
     const result={saved:true,lead:rows[0]}; await auditMcp("cashflow_update_contact",input.leadId,input,result);
     return {content:[{type:"text",text:JSON.stringify(result)}]};
@@ -103,7 +103,7 @@ const handler=createMcpHandler(()=>{
 
 function authorized(request:Request){
   const configured=process.env.CASHFLOW_MCP_TOKEN;
-  return !!configured&&request.headers.get("authorization")===`Bearer ${configured${`;
+  return !!configured&&request.headers.get("authorization")===`Bearer ${configured}`;
 }
 async function handle(request:Request){
   if(!authorized(request)) return new Response(JSON.stringify({error:"Unauthorized"}),{status:401,headers:{"content-type":"application/json","www-authenticate":"Bearer"}});
