@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import * as z from "zod/v4";
-import { ensureResearchSchema, saveResearch } from "../../../lib/research";
-import { getSql } from "../../../lib/db";
+import { ensureResearchSchema, saveResearch } from "../../../../lib/research";
+import { getSql } from "../../../../lib/db";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
