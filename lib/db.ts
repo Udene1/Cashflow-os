@@ -26,6 +26,7 @@ export function ensureSchema() {
     await sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS lead_score INTEGER NOT NULL DEFAULT 0`;
     await sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS signal TEXT NOT NULL DEFAULT ''`;
     await sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS discovered_at TIMESTAMPTZ`;
+    await sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS contact_email TEXT NOT NULL DEFAULT ''`;
     await sql`CREATE TABLE IF NOT EXISTS lead_activities (
       id UUID PRIMARY KEY, lead_id UUID NOT NULL REFERENCES leads(id) ON DELETE CASCADE,
       type TEXT NOT NULL CHECK (type IN ('contact','note','status','proposal','payment')),
