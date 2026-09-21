@@ -22,6 +22,7 @@ Last reconciled: 2026-09-21.
 | Cortea team | Cortea AI | Platform engineering | Email | contact@cortea.ai | Contacted |
 | Langfuse founders | Langfuse | Founder/engineering route | Email | founders@langfuse.com | Contacted |
 | Magbul Shaik | Independent GRC/audit professional | GRC auditor | LinkedIn | LinkedIn | Contacted |
+| Anirudh Ramprasad | Andoria AI | Co-Founder / CTO | LinkedIn | LinkedIn connection note | Contacted |
 
 ## Important reconciliation rules
 
@@ -34,4 +35,4 @@ Last reconciled: 2026-09-21.
 
 ## Production sync
 
-Cashflow OS production currently contains the 10 older contacted lead records but several have channel Research, and the newer Moss/Taxfix/Upvest/Cortea/Langfuse contacts are not all represented as leads. The API has been updated in GitHub to support channel-aware outreach records and creation of missing contacts. Vercel production deployment is in progress; after it is READY, this ledger must be synchronized into the production CRM and verified through the API.
+Cashflow OS production currently contains the older contacted lead records and newer contacts are not all represented as leads. The API has been updated in GitHub to support channel-aware outreach records and creation of missing contacts. Production CRM synchronization must be verified through the live API after deployment.
