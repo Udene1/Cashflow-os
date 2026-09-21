@@ -24,10 +24,13 @@ export async function PATCH(req:NextRequest){
   const status=b.status===undefined?null:validStatus(b.status);
   const followUpAt=b.followUpAt===undefined?null:(b.followUpAt?new Date(b.followUpAt):null);
   if(followUpAt&&!Number.isFinite(followUpAt.getTime()))return NextResponse.json({error:"Invalid follow-up date"}, {status:400});
+  const contactEmail=b.contactEmail===undefined?null:clean(b.contactEmail);
+  if(contactEmail!==null&&!/^\\S+@\\S+\\.\\S+$/.test(contactEmail))return NextResponse.json({error:"Invalid contact email"},{status:400});
   const rows=await sql`UPDATE leads SET
     status=COALESCE(${status},status),
     last_contact=CASE WHEN ${status} IS NOT NULL AND ${status}<>'Found' THEN NOW() ELSE last_contact END,
     channel=CASE WHEN ${b.channel===undefined} THEN channel ELSE ${clean(b.channel)} END,
+    contact_email=CASE WHEN ${contactEmail===null} THEN contact_email ELSE ${contactEmail} END,
     next_action=COALESCE(${b.nextAction===undefined?null:clean(b.nextAction)},next_action),
     follow_up_at=CASE WHEN ${b.followUpAt===undefined} THEN follow_up_at ELSE ${followUpAt} END,
     urgency=CASE WHEN ${b.urgency===undefined} THEN urgency ELSE ${clean(b.urgency)} END,
