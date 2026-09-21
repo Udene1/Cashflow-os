@@ -84,7 +84,7 @@ export async function exchangeCode(code: string) {
 
   let profile:any;
   try {
-    profile = await gmailFetch("/gmail/v1/users/me/profile", data.access_token);
+    profile = await gmailFetch("/profile", data.access_token);
   } catch(e) {
     throw new Error(`Gmail profile lookup failed: ${e instanceof Error?e.message:"unknown error"}`);
   }
