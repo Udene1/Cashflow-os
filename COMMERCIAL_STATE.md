@@ -162,3 +162,7 @@ Optional:
 - `GMAIL_REDIRECT_URI` — otherwise derived as `APP_URL/api/gmail/callback`
 
 The OAuth refresh token is encrypted before database storage.
+
+## Production configuration checkpoint
+
+2026-09-21: Triggered a production redeploy after configuring Gmail OAuth environment variables so the deployment picks up the Production-scoped values.
