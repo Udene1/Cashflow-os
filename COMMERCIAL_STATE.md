@@ -135,3 +135,30 @@ The lesson is:
 **Find companies with real technical demand, start a credible conversation, discover the actual problem, then sell the capability that solves it.**
 
 Cashflow OS should preserve the distinction between what we know, what we suspect, what the prospect confirms, what we offer, and what gets paid.
+
+
+## Gmail outreach automation
+
+Cashflow OS now has a Gmail OAuth integration for Kenneth's own outreach workflow.
+
+Flow:
+1. Connect the Gmail account once through Cashflow OS.
+2. Research produces a verified recipient, subject, and message.
+3. The outreach message can be sent through Gmail API instead of copy/paste.
+4. The send is recorded with channel=Email, recipient, subject, message, Gmail message ID, and delivery state.
+5. Gmail delivery failures can be checked and marked as bounced.
+6. A bounced email sets the next action to try LinkedIn or another verified channel.
+7. If the next attempt is LinkedIn/X/etc., record that actual channel in the CRM.
+
+The integration uses Gmail OAuth with `gmail.send` for sending and `gmail.readonly` for delivery/bounce inspection. Google classifies these as sensitive/restricted Gmail scopes, so this is intended first for Kenneth's own/test account rather than as a public multi-user Gmail application. Do not expose Google client secrets or refresh tokens to the browser.
+
+Required Vercel environment variables:
+- `APP_URL`
+- `GOOGLE_CLIENT_ID`
+- `GOOGLE_CLIENT_SECRET`
+- `GMAIL_TOKEN_ENCRYPTION_KEY` — 32-byte key represented as 64 hex characters
+
+Optional:
+- `GMAIL_REDIRECT_URI` — otherwise derived as `APP_URL/api/gmail/callback`
+
+The OAuth refresh token is encrypted before database storage.
