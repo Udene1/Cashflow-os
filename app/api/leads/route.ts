@@ -27,6 +27,7 @@ export async function PATCH(req:NextRequest){
   const rows=await sql`UPDATE leads SET
     status=COALESCE(${status},status),
     last_contact=CASE WHEN ${status} IS NOT NULL AND ${status}<>'Found' THEN NOW() ELSE last_contact END,
+    channel=CASE WHEN ${b.channel===undefined} THEN channel ELSE ${clean(b.channel)} END,
     next_action=COALESCE(${b.nextAction===undefined?null:clean(b.nextAction)},next_action),
     follow_up_at=CASE WHEN ${b.followUpAt===undefined} THEN follow_up_at ELSE ${followUpAt} END,
     urgency=CASE WHEN ${b.urgency===undefined} THEN urgency ELSE ${clean(b.urgency)} END,
