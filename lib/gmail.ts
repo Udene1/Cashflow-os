@@ -179,3 +179,31 @@ export async function gmailStatus() {
   const rows = await sql`SELECT email,updated_at AS "updatedAt" FROM gmail_connections WHERE id='default'`;
   return rows[0] || null;
 }
+
+
+export async function gmailAccountSummary() {
+  await ensureSchema();
+  const sql = getSql();
+  const connectionRows = await sql`SELECT email, updated_at AS "updatedAt" FROM gmail_connections WHERE id='default'`;
+  if (!connectionRows[0]) return null;
+  const counts = await sql`SELECT
+    COUNT(*) FILTER (WHERE channel='Email')::int AS "sent",
+    COUNT(*) FILTER (WHERE channel='Email' AND delivery_status='bounced')::int AS "bounced",
+    COUNT(*) FILTER (WHERE channel='Email' AND delivery_status='replied')::int AS "replied",
+    COUNT(*) FILTER (WHERE channel='Email' AND delivery_status='sent')::int AS "pending"
+    FROM outreach_messages`;
+  let displayName = "";
+  try {
+    const listed = await searchGmail("in:sent", 5);
+    const messages = listed.messages || [];
+    if (messages[0]) {
+      const message = await getGmailMessage(messages[0].id);
+      const from = (message.payload?.headers || []).find((h:any) => String(h.name).toLowerCase() === "from")?.value || "";
+      const match = String(from).match(/^\s*"([^"]+)"\s*</) || String(from).match(/^\s*([^<]+?)\s*</);
+      displayName = String(match?.[1] || "").trim();
+    }
+  } catch (e) {
+    console.warn("[gmail-summary] could not read sender display name", e);
+  }
+  return { ...connectionRows[0], displayName, ...counts[0] };
+}
