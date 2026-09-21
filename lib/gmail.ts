@@ -67,24 +67,43 @@ async function tokenRequest(params: URLSearchParams) {
 }
 
 export async function exchangeCode(code: string) {
-  const data = await tokenRequest(new URLSearchParams({
-    code,
-    client_id: required("GOOGLE_CLIENT_ID"),
-    client_secret: required("GOOGLE_CLIENT_SECRET"),
-    redirect_uri: gmailRedirectUri(),
-    grant_type: "authorization_code"
-  }));
-  if (!data.refresh_token) throw new Error("Google did not return a refresh token; reconnect with consent");
-  const profile = await gmailFetch("/gmail/v1/users/me/profile", data.access_token);
-  await ensureSchema();
-  const sql = getSql();
-  await sql`INSERT INTO gmail_connections(id,email,refresh_token_encrypted,scope,updated_at)
-    VALUES ('default',${profile.emailAddress},${encrypt(data.refresh_token)},${String(data.scope || GMAIL_SCOPES.join(" "))},NOW())
-    ON CONFLICT (id) DO UPDATE SET
-      email=EXCLUDED.email,
-      refresh_token_encrypted=EXCLUDED.refresh_token_encrypted,
-      scope=EXCLUDED.scope,
-      updated_at=NOW()`;
+  let data:any;
+  try {
+    data = await tokenRequest(new URLSearchParams({
+      code,
+      client_id: required("GOOGLE_CLIENT_ID"),
+      client_secret: required("GOOGLE_CLIENT_SECRET"),
+      redirect_uri: gmailRedirectUri(),
+      grant_type: "authorization_code"
+    }));
+  } catch(e) {
+    throw new Error(`Google token exchange failed: ${e instanceof Error?e.message:"unknown error"}`);
+  }
+
+  if (!data.refresh_token) throw new Error("Google token exchange succeeded but returned no refresh token");
+
+  let profile:any;
+  try {
+    profile = await gmailFetch("/gmail/v1/users/me/profile", data.access_token);
+  } catch(e) {
+    throw new Error(`Gmail profile lookup failed: ${e instanceof Error?e.message:"unknown error"}`);
+  }
+
+  try {
+    await ensureSchema();
+    const sql = getSql();
+    await sql`INSERT INTO gmail_connections(id,email,refresh_token_encrypted,scope,updated_at)
+      VALUES ('default',${profile.emailAddress},${encrypt(data.refresh_token)},${String(data.scope || GMAIL_SCOPES.join(" "))},NOW())
+      ON CONFLICT (id) DO UPDATE SET
+        email=EXCLUDED.email,
+        refresh_token_encrypted=EXCLUDED.refresh_token_encrypted,
+        scope=EXCLUDED.scope,
+        updated_at=NOW()`;
+  } catch(e) {
+    console.error("[gmail-oauth] database persistence failed",e);
+    throw new Error(`Gmail database write failed: ${e instanceof Error?e.message:"unknown error"}`);
+  }
+
   return profile.emailAddress as string;
 }
 
