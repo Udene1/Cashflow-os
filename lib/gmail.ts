@@ -190,7 +190,7 @@ export async function gmailAccountSummary() {
     COUNT(*) FILTER (WHERE channel='Email')::int AS "sent",
     COUNT(*) FILTER (WHERE channel='Email' AND delivery_status='bounced')::int AS "bounced",
     COUNT(*) FILTER (WHERE channel='Email' AND delivery_status='replied')::int AS "replied",
-    COUNT(*) FILTER (WHERE channel='Email' AND delivery_status='sent')::int AS "pending"
+    COUNT(*) FILTER (WHERE channel='Email' AND delivery_status='unknown')::int AS "pending"
     FROM outreach_messages`;
   let displayName = "";
   try {
