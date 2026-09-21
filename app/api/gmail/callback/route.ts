@@ -8,11 +8,15 @@ export async function GET(req:NextRequest){
   const expected=req.cookies.get("gmail_oauth_state")?.value;
   if(!code||!state||!expected||state!==expected)return NextResponse.json({error:"Invalid Gmail OAuth state"},{status:400});
   try{
-    await exchangeCode(code);
-    const response=NextResponse.redirect(new URL("/?gmail=connected",req.url));
+    const email=await exchangeCode(code);
+    const response=NextResponse.redirect(new URL("/?gmail=connected&email="+encodeURIComponent(email),req.url));
     response.cookies.delete("gmail_oauth_state");
     return response;
   }catch(e){
-    return NextResponse.redirect(new URL("/?gmail=error&message="+encodeURIComponent(e instanceof Error?e.message:"Gmail connection failed"),req.url));
+    const err=e instanceof Error?e.message:"Gmail connection failed";
+    console.error("[gmail-oauth] callback failed",err);
+    const response=NextResponse.redirect(new URL("/?gmail=error&message="+encodeURIComponent(err),req.url));
+    response.cookies.delete("gmail_oauth_state");
+    return response;
   }
 }
