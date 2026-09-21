@@ -37,6 +37,32 @@ export function ensureSchema() {
     await sql`CREATE INDEX IF NOT EXISTS leads_score_idx ON leads(lead_score DESC)`;
     await sql`CREATE UNIQUE INDEX IF NOT EXISTS leads_source_url_idx ON leads(source_url) WHERE source_url <> ''`;
     await sql`CREATE INDEX IF NOT EXISTS activities_lead_idx ON lead_activities(lead_id, created_at DESC)`;
+    await sql`CREATE TABLE IF NOT EXISTS gmail_connections (
+      id TEXT PRIMARY KEY,
+      email TEXT NOT NULL DEFAULT '',
+      refresh_token_encrypted TEXT NOT NULL,
+      scope TEXT NOT NULL DEFAULT '',
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )`;
+    await sql`CREATE TABLE IF NOT EXISTS outreach_messages (
+      id UUID PRIMARY KEY,
+      lead_id UUID NOT NULL REFERENCES leads(id) ON DELETE CASCADE,
+      channel TEXT NOT NULL,
+      recipient TEXT NOT NULL,
+      subject TEXT NOT NULL DEFAULT '',
+      body TEXT NOT NULL DEFAULT '',
+      provider_message_id TEXT NOT NULL DEFAULT '',
+      provider_thread_id TEXT NOT NULL DEFAULT '',
+      delivery_status TEXT NOT NULL DEFAULT 'sent' CHECK (delivery_status IN ('sent','bounced','replied','unknown')),
+      bounce_reason TEXT NOT NULL DEFAULT '',
+      sent_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      bounced_at TIMESTAMPTZ,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )`;
+    await sql`CREATE INDEX IF NOT EXISTS outreach_lead_idx ON outreach_messages(lead_id, created_at DESC)`;
+    await sql`CREATE INDEX IF NOT EXISTS outreach_provider_idx ON outreach_messages(provider_message_id)`;
   })();
   return schemaPromise;
 }
