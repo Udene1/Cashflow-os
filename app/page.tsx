@@ -1,5 +1,6 @@
 "use client";
 import {useEffect,useMemo,useState} from "react";
+import GmailPage from "./gmail-page";
 
 type Status="Found"|"Contacted"|"Replied"|"Qualified"|"Proposal"|"Won"|"Lost";
 type Activity={id:string;type:"contact"|"note"|"status"|"proposal"|"payment";body:string;amount:number|string|null;createdAt:string};
