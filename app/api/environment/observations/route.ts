@@ -12,6 +12,7 @@ type Observation = {
   observedAt: string;
   actor: string;
   interface: string;
+  metadata: Record<string, string>;
   content: string;
 };
 
@@ -75,6 +76,7 @@ export async function GET(request: Request) {
         observedAt: new Date(row.updatedAt).toISOString(),
         actor: "unknown",
         interface: "rest-api",
+        metadata: { kind: "lead.state", actor: "unknown", interface: "rest-api" },
         content: JSON.stringify(row),
       })),
       ...research.map((row: any) => ({
@@ -84,6 +86,7 @@ export async function GET(request: Request) {
         observedAt: new Date(row.updatedAt).toISOString(),
         actor: "unknown",
         interface: "research-api",
+        metadata: { kind: "research.recorded", actor: "unknown", interface: "research-api" },
         content: JSON.stringify(row),
       })),
       ...activities.map((row: any) => ({
@@ -93,6 +96,7 @@ export async function GET(request: Request) {
         observedAt: new Date(row.createdAt).toISOString(),
         actor: "unknown",
         interface: "rest-api",
+        metadata: { kind: `activity.${row.type}`, actor: "unknown", interface: "rest-api" },
         content: JSON.stringify(row),
       })),
       ...audit.map((row: any) => ({
@@ -102,6 +106,7 @@ export async function GET(request: Request) {
         observedAt: new Date(row.createdAt).toISOString(),
         actor: "unknown",
         interface: "mcp",
+        metadata: { kind: "mcp.tool_call", actor: "unknown", interface: "mcp" },
         content: JSON.stringify(row),
       })),
       ...outreach.map((row: any) => ({
@@ -111,6 +116,7 @@ export async function GET(request: Request) {
         observedAt: new Date(row.updatedAt).toISOString(),
         actor: "unknown",
         interface: "gmail-api",
+        metadata: { kind: "outreach.state", actor: "unknown", interface: "gmail-api" },
         content: JSON.stringify(row),
       })),
     ].sort((a, b) => a.observedAt.localeCompare(b.observedAt)).slice(0, limit);
