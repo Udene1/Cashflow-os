@@ -1,6 +1,6 @@
 # Commercial State
 
-Last updated: 2026-09-21
+Last updated: 2026-09-22
 
 This is the canonical commercial context for Cashflow OS. Read it before researching leads or writing outreach.
 
@@ -63,6 +63,46 @@ Before outreach:
 
 Signals can include engineering hiring, production incidents, migrations, infrastructure changes, API/backend work, database scaling, CI/CD changes, security initiatives, compliance work, launches, integrations, or public engineering discussions. A signal is not proof of pain.
 
+### General company inbox rule
+
+A verified general company email is a valid contact route when a more direct verified route is unavailable, but it should not make the outreach ownerless.
+
+When using a general inbox:
+
+1. Still research and identify the closest relevant person or role.
+2. Address the message to that person by name when their identity is verified, even if the recipient address is a general inbox.
+3. If the person's direct email is unavailable, explicitly ask the recipient to route or forward the message to that person/role.
+4. If no individual can be verified, name the relevant function or role and ask for the person who owns it.
+5. Never imply that the named person personally received the email unless the recipient address is actually theirs.
+6. Record the actual recipient email separately from the intended/closest owner in the CRM.
+7. Do not manufacture a direct email from a company pattern.
+
+Example:
+
+"Hi Hiring team,
+
+I came across [specific technical signal]. I was particularly interested in the work around [problem area].
+
+Could you point this to [Name], who appears to own [area], or whoever is responsible for it?"
+
+This is preferable to sending an ownerless generic message because the goal is to reach the person closest to the problem, while remaining truthful about the actual contact route.
+
+## Contact-person priority
+
+Use this priority when selecting who to approach:
+
+1. Named person who owns the exact technical problem.
+2. CTO/founder/technical cofounder for a small company.
+3. Head/VP/Director of Engineering, Platform, Infrastructure, or Security for the relevant problem.
+4. Named hiring manager or job poster for an active engineering signal.
+5. Verified general company email only when no better verified route exists.
+
+The principle is:
+
+signal -> exact problem -> person closest to it -> verified contact -> outreach
+
+Do not choose someone merely because they are senior. Optimize for proximity to the problem and ability to route, authorize, or influence the work.
+
 ## Outreach principles
 
 - Curiosity before selling.
@@ -72,6 +112,7 @@ Signals can include engineering hiring, production incidents, migrations, infras
 - Do not lead with a generic availability pitch.
 - Never pretend an unverified pain is confirmed.
 - Never guess contact details.
+- When using a general inbox, make the intended owner or responsible function explicit and ask for routing when appropriate.
 - Do not send large batches without learning from responses.
 
 ## Commercial routing
@@ -114,6 +155,7 @@ Future agents must not:
 8. Optimize for contact count instead of conversations and paid outcomes.
 9. Ask Kenneth to repeat this strategy.
 10. Revert to product-first selling without new evidence.
+11. Treat a verified general company inbox as a reason to stop looking for the closest relevant person.
 
 For every new lead, establish:
 
@@ -135,7 +177,6 @@ The lesson is:
 **Find companies with real technical demand, start a credible conversation, discover the actual problem, then sell the capability that solves it.**
 
 Cashflow OS should preserve the distinction between what we know, what we suspect, what the prospect confirms, what we offer, and what gets paid.
-
 
 ## Gmail outreach automation
 
