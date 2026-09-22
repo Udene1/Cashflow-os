@@ -63,14 +63,14 @@ export async function GET() {
   try {
     await ensureSchema();
     const sql = getSql();
-    const pending = await sql\`
+    const pending = await sql`
       SELECT id, lead_id, recipient, provider_message_id, sent_at
       FROM outreach_messages
       WHERE channel = 'Email'
         AND delivery_status = 'sent'
         AND sent_at > NOW() - INTERVAL '14 days'
       ORDER BY sent_at DESC
-    \`;
+    `;
     if (!pending.length) return NextResponse.json({ checked: 0, candidates: 0, bounced: 0 });
 
     const listed = await searchGmail('newer_than:14d (from:mailer-daemon OR from:postmaster)', 100);
@@ -102,28 +102,28 @@ export async function GET() {
       if (!row) continue;
 
       const reason = header(message, "Subject") || header(message, "X-Failed-Recipients") || "Gmail delivery failure";
-      const updated = await sql\`
+      const updated = await sql`
         UPDATE outreach_messages
         SET delivery_status = 'bounced',
-            bounce_reason = \${reason},
-            bounced_at = TO_TIMESTAMP(\${bounceTime / 1000}),
+            bounce_reason = ${reason},
+            bounced_at = TO_TIMESTAMP(${bounceTime / 1000}),
             updated_at = NOW()
-        WHERE id = \${row.id}
+        WHERE id = ${row.id}
           AND delivery_status = 'sent'
         RETURNING id, lead_id, recipient
-      \`;
+      `;
       if (!updated.length) continue;
 
-      await sql\`
+      await sql`
         UPDATE leads
         SET next_action = 'Email bounced — try LinkedIn or another verified channel',
             updated_at = NOW()
-        WHERE id = \${row.lead_id}
-      \`;
-      await sql\`
+        WHERE id = ${row.lead_id}
+      `;
+      await sql`
         INSERT INTO lead_activities(id, lead_id, type, body)
-        VALUES(\${crypto.randomUUID()}, \${row.lead_id}, 'note', \${"Email bounced for " + row.recipient + ". " + reason})
-      \`;
+        VALUES(${crypto.randomUUID()}, ${row.lead_id}, 'note', ${"Email bounced for " + row.recipient + ". " + reason})
+      `;
       bounced++;
     }
 
