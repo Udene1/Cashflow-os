@@ -1,5 +1,5 @@
-import { ensureSchema, getSql } from "../../../../lib/db";
-import { getGmailMessage, searchGmail } from "../../../../lib/gmail";
+import { ensureSchema, getSql } from "./db";
+import { getGmailMessage, searchGmail } from "./gmail";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -70,7 +70,7 @@ export async function reconcileGmailBounces() {
         AND sent_at > NOW() - INTERVAL '14 days'
       ORDER BY sent_at DESC
     `;
-    if (!pending.length) return NextResponse.json({ checked: 0, candidates: 0, bounced: 0 });
+    if (!pending.length) return { checked: 0, candidates: 0, bounced: 0 };
 
     const listed = await searchGmail('newer_than:14d (from:mailer-daemon OR from:postmaster)', 100);
     let candidates = 0;
