@@ -57,7 +57,6 @@ export async function GET(request: Request) {
       const existing = await sql`SELECT id,status FROM leads WHERE id=${patchBody.leadId}`;
       if (!existing[0]) return NextResponse.json({ error: "Lead not found" }, { status: 404 });
       const rows = await sql`UPDATE leads SET
-        contact_email=COALESCE(${patchBody.contactEmail ?? null},contact_email),
         status=${patchBody.status},
         last_contact=NOW(),
         next_action=${patchBody.nextAction},
