@@ -49,6 +49,7 @@ export async function reconcileGmailReplies() {
     const receivedAt = new Date(Number(message.internalDate || Date.now()));
     if (!sender || !Number.isFinite(receivedAt.getTime())) continue;
 
+    // Prefer Gmail thread identity; fall back to sender and normalized subject.
     let matches = pending.filter((row: any) => threadId && String(row.provider_thread_id || "") === threadId);
     if (!matches.length) {
       const normalizedSubject = normalizeSubject(subject);
