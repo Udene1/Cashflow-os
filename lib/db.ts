@@ -100,6 +100,12 @@ export function ensureSchema() {
     )`;
     await sql`CREATE INDEX IF NOT EXISTS outreach_lead_idx ON outreach_messages(lead_id, created_at DESC)`;
     await sql`CREATE INDEX IF NOT EXISTS outreach_provider_idx ON outreach_messages(provider_message_id)`;
+    await sql`CREATE TABLE IF NOT EXISTS gmail_sync_state (
+      id TEXT PRIMARY KEY,
+      last_sync_at TIMESTAMPTZ,
+      locked_until TIMESTAMPTZ
+    )`;
+    await sql`INSERT INTO gmail_sync_state(id) VALUES ('default') ON CONFLICT (id) DO NOTHING`;
     await sql`CREATE TABLE IF NOT EXISTS gmail_inbound_messages (
       id UUID PRIMARY KEY, lead_id UUID NOT NULL REFERENCES leads(id) ON DELETE CASCADE,
       gmail_message_id TEXT NOT NULL UNIQUE, gmail_thread_id TEXT NOT NULL DEFAULT '',
