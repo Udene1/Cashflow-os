@@ -3,7 +3,9 @@ import * as z from "zod/v4";
 import { ensureSchema, getSql } from "../../../../lib/db";
 
 export const runtime = "nodejs";
-export const dynamic = "force-dynamic";\n\nconst patchInput = z.object({
+export const dynamic = "force-dynamic";
+
+const patchInput = z.object({
   leadId: z.string().uuid(),
   status: z.enum(["Found","Contacted","Replied","Qualified","Proposal","Won","Lost"]).optional(),
   nextAction: z.string().optional(),
@@ -38,7 +40,12 @@ export async function GET(request: Request) {
     const encoded = url.searchParams.get("payload");
     if (!encoded) return NextResponse.json({ error: "payload is required" }, { status: 400 });
 
-    const decoded = JSON.parse(Buffer.from(encoded, "base64url").toString("utf8"));\n    if (decoded?.action === "patch") {\n      const { action: _action, ...patchPayload } = decoded;\n      return PATCH(new Request(request.url, { method: "PATCH", headers: { "content-type": "application/json" }, body: JSON.stringify(patchPayload) }));\n    }\n    const body = input.parse(decoded);
+    const decoded = JSON.parse(Buffer.from(encoded, "base64url").toString("utf8"));
+    if (decoded?.action === "patch") {
+      const patchPayload = { ...decoded };
+      delete patchPayload.action;
+      return PATCH(new Request(request.url, { method: "PATCH", headers: { "content-type": "application/json" }, body: JSON.stringify(patchPayload) }));
+    }\n    const body = input.parse(decoded);
     if (body.email && !z.email().safeParse(body.email).success) {
       return NextResponse.json({ error: "Invalid email" }, { status: 400 });
     }
