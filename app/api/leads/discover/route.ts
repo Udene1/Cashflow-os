@@ -134,6 +134,17 @@ async function discover() {
   let skipped = 0;
 
   for (const job of jobs) {
+    const suppressed = await sql`
+      SELECT 1 FROM deleted_leads
+      WHERE (source_url <> '' AND source_url = ${job.url})
+         OR (LOWER(company) = LOWER(${job.company}) AND LOWER(role) = LOWER(${job.title}))
+      LIMIT 1
+    `;
+    if (suppressed[0]) {
+      skipped++;
+      continue;
+    }
+
     const rows = await sql`
       INSERT INTO leads (
         id,name,company,role,channel,problem,source,status,value,next_action,
