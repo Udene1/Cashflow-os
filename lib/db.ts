@@ -27,6 +27,18 @@ export function ensureSchema() {
     await sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS signal TEXT NOT NULL DEFAULT ''`;
     await sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS discovered_at TIMESTAMPTZ`;
     await sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS contact_email TEXT NOT NULL DEFAULT ''`;
+    await sql`CREATE TABLE IF NOT EXISTS deleted_leads (
+      id UUID PRIMARY KEY,
+      original_lead_id UUID NOT NULL,
+      name TEXT NOT NULL DEFAULT '',
+      company TEXT NOT NULL DEFAULT '',
+      role TEXT NOT NULL DEFAULT '',
+      source TEXT NOT NULL DEFAULT '',
+      source_url TEXT NOT NULL DEFAULT '',
+      deleted_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )`;
+    await sql`CREATE INDEX IF NOT EXISTS deleted_leads_source_url_idx ON deleted_leads(source_url) WHERE source_url <> ''`;
+    await sql`CREATE INDEX IF NOT EXISTS deleted_leads_company_role_idx ON deleted_leads(company, role)`;
     await sql`CREATE TABLE IF NOT EXISTS lead_activities (
       id UUID PRIMARY KEY, lead_id UUID NOT NULL REFERENCES leads(id) ON DELETE CASCADE,
       type TEXT NOT NULL CHECK (type IN ('contact','note','status','proposal','payment')),
