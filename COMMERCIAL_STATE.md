@@ -1,6 +1,6 @@
 # Commercial State
 
-Last updated: 2026-09-23
+Last updated: 2026-09-22
 
 This is the canonical commercial context for Cashflow OS. Read it before researching leads or writing outreach.
 
@@ -207,5 +207,3 @@ The OAuth refresh token is encrypted before database storage.
 ## Production configuration checkpoint
 
 2026-09-21: Triggered a production redeploy after configuring Gmail OAuth environment variables so the deployment picks up the Production-scoped values.
-
-2026-09-23: Verified the agent-facing Gmail send and lead-preparation routes exist on main at `app/api/agent/email/route.ts` and `app/api/agent/prepare-lead/route.ts`. The current production deployment returned 404 for the preparation route despite the production commit matching main. This needs a fresh production deployment before agent outreach can safely continue.
