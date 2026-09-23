@@ -45,7 +45,8 @@ export async function GET(request: Request) {
       const patchPayload = { ...decoded };
       delete patchPayload.action;
       return PATCH(new Request(request.url, { method: "PATCH", headers: { "content-type": "application/json" }, body: JSON.stringify(patchPayload) }));
-    }\n    const body = input.parse(decoded);
+    }
+    const body = input.parse(decoded);
     if (body.email && !z.email().safeParse(body.email).success) {
       return NextResponse.json({ error: "Invalid email" }, { status: 400 });
     }
