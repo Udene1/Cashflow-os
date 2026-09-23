@@ -100,6 +100,13 @@ export function ensureSchema() {
     )`;
     await sql`CREATE INDEX IF NOT EXISTS outreach_lead_idx ON outreach_messages(lead_id, created_at DESC)`;
     await sql`CREATE INDEX IF NOT EXISTS outreach_provider_idx ON outreach_messages(provider_message_id)`;
+    await sql`CREATE TABLE IF NOT EXISTS gmail_inbound_messages (
+      id UUID PRIMARY KEY, lead_id UUID NOT NULL REFERENCES leads(id) ON DELETE CASCADE,
+      gmail_message_id TEXT NOT NULL UNIQUE, gmail_thread_id TEXT NOT NULL DEFAULT '',
+      sender TEXT NOT NULL DEFAULT '', subject TEXT NOT NULL DEFAULT '', body TEXT NOT NULL DEFAULT '',
+      received_at TIMESTAMPTZ NOT NULL DEFAULT NOW(), created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )`;
+    await sql`CREATE INDEX IF NOT EXISTS gmail_inbound_lead_idx ON gmail_inbound_messages(lead_id, received_at DESC)`;
   })();
   return schemaPromise;
 }

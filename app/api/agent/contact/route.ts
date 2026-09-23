@@ -82,3 +82,60 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: "Contact record unavailable" }, { status: 500 });
   }
 }
+
+const patchInput = z.object({
+  leadId: z.string().uuid(),
+  status: z.enum(["Found","Contacted","Replied","Qualified","Proposal","Won","Lost"]).optional(),
+  nextAction: z.string().optional(),
+  followUpAt: z.string().nullable().optional(),
+  decisionMaker: z.string().optional(),
+  budget: z.string().optional(),
+  timeline: z.string().optional(),
+  urgency: z.string().optional(),
+  notes: z.string().optional(),
+  activityType: z.enum(["contact","note","status","proposal","payment"]).optional(),
+  activityBody: z.string().optional(),
+  confirmation: z.literal("approved")
+});
+
+export async function PATCH(request: Request) {
+  try {
+    const body = patchInput.parse(await request.json());
+    await ensureSchema();
+    const sql = getSql();
+    const existing = await sql`SELECT id,status FROM leads WHERE id=${body.leadId}`;
+    if (!existing[0]) return NextResponse.json({ error: "Lead not found" }, { status: 404 });
+    let followUpAt: Date | null | undefined = undefined;
+    if (body.followUpAt !== undefined) {
+      followUpAt = body.followUpAt ? new Date(body.followUpAt) : null;
+      if (followUpAt && !Number.isFinite(followUpAt.getTime())) return NextResponse.json({ error: "Invalid follow-up date" }, { status: 400 });
+    }
+    const rows = await sql`UPDATE leads SET
+      status=COALESCE(${body.status ?? null},status),
+      last_contact=CASE WHEN ${body.status ?? null} IS NOT NULL AND ${body.status ?? null}<>'Found' THEN NOW() ELSE last_contact END,
+      next_action=COALESCE(${body.nextAction ?? null},next_action),
+      follow_up_at=CASE WHEN ${body.followUpAt === undefined} THEN follow_up_at ELSE ${followUpAt ?? null} END,
+      decision_maker=COALESCE(${body.decisionMaker ?? null},decision_maker),
+      budget=COALESCE(${body.budget ?? null},budget),
+      timeline=COALESCE(${body.timeline ?? null},timeline),
+      urgency=COALESCE(${body.urgency ?? null},urgency),
+      notes=COALESCE(${body.notes ?? null},notes),
+      updated_at=NOW()
+      WHERE id=${body.leadId}
+      RETURNING id,name,company,role,channel,contact_email AS "contactEmail",status,last_contact AS "lastContact",next_action AS "nextAction",follow_up_at AS "followUpAt",decision_maker AS "decisionMaker",budget,timeline,urgency,notes`;
+    if (body.status && body.status !== existing[0].status) {
+      await sql`INSERT INTO lead_activities(id,lead_id,type,body)
+        VALUES(${crypto.randomUUID()},${body.leadId},'status',${"Agent moved lead from "+existing[0].status+" to "+body.status})`;
+    }
+    if (body.activityBody) {
+      const type = body.activityType || "note";
+      await sql`INSERT INTO lead_activities(id,lead_id,type,body)
+        VALUES(${crypto.randomUUID()},${body.leadId},${type},${body.activityBody})`;
+    }
+    return NextResponse.json({ saved: true, lead: rows[0] });
+  } catch (e) {
+    if (e instanceof z.ZodError) return NextResponse.json({ error: "Invalid agent patch payload", details: e.issues }, { status: 400 });
+    console.error(e);
+    return NextResponse.json({ error: "Agent lead patch unavailable" }, { status: 500 });
+  }
+}
