@@ -44,7 +44,41 @@ export async function GET(request: Request) {
     if (decoded?.action === "patch") {
       const patchPayload = { ...decoded };
       delete patchPayload.action;
-      return PATCH(new Request(request.url, { method: "PATCH", headers: { "content-type": "application/json" }, body: JSON.stringify(patchPayload) }));
+      const patchBody = patchInput.parse(patchPayload);
+      await ensureSchema();
+      const sql = getSql();
+      const existing = await sql`SELECT id,status FROM leads WHERE id=${patchBody.leadId}`;
+      if (!existing[0]) return NextResponse.json({ error: "Lead not found" }, { status: 404 });
+      let followUpAt: Date | null | undefined = undefined;
+      if (patchBody.followUpAt !== undefined) {
+        followUpAt = patchBody.followUpAt ? new Date(patchBody.followUpAt) : null;
+        if (followUpAt && !Number.isFinite(followUpAt.getTime())) {
+          return NextResponse.json({ error: "Invalid follow-up date" }, { status: 400 });
+        }
+      }
+      const rows = await sql`UPDATE leads SET
+        status=COALESCE(${patchBody.status ?? null},status),
+        last_contact=CASE WHEN ${patchBody.status ?? null} IS NOT NULL AND ${patchBody.status ?? null}<>'Found' THEN NOW() ELSE last_contact END,
+        next_action=COALESCE(${patchBody.nextAction ?? null},next_action),
+        follow_up_at=CASE WHEN ${patchBody.followUpAt === undefined} THEN follow_up_at ELSE ${followUpAt ?? null} END,
+        decision_maker=COALESCE(${patchBody.decisionMaker ?? null},decision_maker),
+        budget=COALESCE(${patchBody.budget ?? null},budget),
+        timeline=COALESCE(${patchBody.timeline ?? null},timeline),
+        urgency=COALESCE(${patchBody.urgency ?? null},urgency),
+        notes=COALESCE(${patchBody.notes ?? null},notes),
+        updated_at=NOW()
+        WHERE id=${patchBody.leadId}
+        RETURNING id,name,company,role,channel,contact_email AS "contactEmail",status,last_contact AS "lastContact",next_action AS "nextAction",follow_up_at AS "followUpAt",decision_maker AS "decisionMaker",budget,timeline,urgency,notes`;
+      if (patchBody.status && patchBody.status !== existing[0].status) {
+        await sql`INSERT INTO lead_activities(id,lead_id,type,body)
+          VALUES(${crypto.randomUUID()},${patchBody.leadId},'status',${"Agent moved lead from "+existing[0].status+" to "+patchBody.status})`;
+      }
+      if (patchBody.activityBody) {
+        const type = patchBody.activityType || "note";
+        await sql`INSERT INTO lead_activities(id,lead_id,type,body)
+          VALUES(${crypto.randomUUID()},${patchBody.leadId},${type},${patchBody.activityBody})`;
+      }
+      return NextResponse.json({ saved: true, lead: rows[0] });
     }
     const body = input.parse(decoded);
     if (body.email && !z.email().safeParse(body.email).success) {
