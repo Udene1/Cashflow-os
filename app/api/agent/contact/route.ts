@@ -44,6 +44,7 @@ export async function GET(request: Request) {
     if (decoded?.action === "patch") {
       const patchBody = z.object({
         leadId: z.string().uuid(),
+        contactEmail: z.string().email().optional(),
         status: z.enum(["Found","Contacted","Replied","Qualified","Proposal","Won","Lost"]),
         nextAction: z.string(),
         notes: z.string(),
