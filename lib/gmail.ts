@@ -192,18 +192,5 @@ export async function gmailAccountSummary() {
     COUNT(*) FILTER (WHERE channel='Email' AND delivery_status='replied')::int AS "replied",
     COUNT(*) FILTER (WHERE channel='Email' AND delivery_status='unknown')::int AS "pending"
     FROM outreach_messages`;
-  let displayName = "";
-  try {
-    const listed = await searchGmail("in:sent", 5);
-    const messages = listed.messages || [];
-    if (messages[0]) {
-      const message = await getGmailMessage(messages[0].id);
-      const from = (message.payload?.headers || []).find((h:any) => String(h.name).toLowerCase() === "from")?.value || "";
-      const match = String(from).match(/^\s*"([^"]+)"\s*</) || String(from).match(/^\s*([^<]+?)\s*</);
-      displayName = String(match?.[1] || "").trim();
-    }
-  } catch (e) {
-    console.warn("[gmail-summary] could not read sender display name", e);
-  }
-  return { ...connectionRows[0], displayName, ...counts[0] };
+  return { ...connectionRows[0], displayName: "", ...counts[0] };
 }
