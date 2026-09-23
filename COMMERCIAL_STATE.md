@@ -168,6 +168,12 @@ For every new lead, establish:
 
 Then write outreach.
 
+## Closed lead: Nebius
+
+2026-09-23: Nebius commercial inquiry is closed as **Lost for now**. Support routed the inquiry to Sales, but the Sales path was oriented toward Nebius's prospective customer/buyer information and did not provide a buyer-side contact for our offer. No concrete demand, owner, or commercial conversation for our services was established. Do not spend further outreach effort on Nebius unless a direct relevant owner/contact or a concrete need emerges.
+
+Commercial lesson: a vendor's Sales intake is not evidence of buyer interest. A technically relevant company is still a weak lead if the path only routes us into their own customer-sales funnel.
+
 ## Current lesson
 
 The outreach already conducted is intentionally problem-led. The lesson is not “find more companies for Compflow.”
