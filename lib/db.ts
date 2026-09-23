@@ -44,6 +44,31 @@ export function ensureSchema() {
       type TEXT NOT NULL CHECK (type IN ('contact','note','status','proposal','payment')),
       body TEXT NOT NULL DEFAULT '', amount NUMERIC(14,2), created_at TIMESTAMPTZ NOT NULL DEFAULT NOW())
     `;
+    await sql`CREATE TABLE IF NOT EXISTS discovery_evidence (
+      id UUID PRIMARY KEY,
+      company TEXT NOT NULL,
+      role TEXT NOT NULL DEFAULT '',
+      source TEXT NOT NULL DEFAULT '',
+      source_url TEXT NOT NULL,
+      signal TEXT NOT NULL DEFAULT '',
+      description TEXT NOT NULL DEFAULT '',
+      published_at TIMESTAMPTZ,
+      score INTEGER NOT NULL DEFAULT 0,
+      matched_rules TEXT NOT NULL DEFAULT '',
+      categories TEXT NOT NULL DEFAULT '',
+      discovered_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )`;
+    await sql`CREATE UNIQUE INDEX IF NOT EXISTS discovery_evidence_source_url_idx ON discovery_evidence(source_url)`;
+    await sql`CREATE INDEX IF NOT EXISTS discovery_evidence_company_idx ON discovery_evidence(company)`;
+    await sql`CREATE TABLE IF NOT EXISTS discovery_evidence (
+      id UUID PRIMARY KEY, company TEXT NOT NULL, role TEXT NOT NULL DEFAULT '',
+      source TEXT NOT NULL DEFAULT '', source_url TEXT NOT NULL, signal TEXT NOT NULL DEFAULT '',
+      description TEXT NOT NULL DEFAULT '', published_at TIMESTAMPTZ, score INTEGER NOT NULL DEFAULT 0,
+      matched_rules TEXT NOT NULL DEFAULT '', categories TEXT NOT NULL DEFAULT '',
+      discovered_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )`;
+    await sql`CREATE UNIQUE INDEX IF NOT EXISTS discovery_evidence_source_url_idx ON discovery_evidence(source_url)`;
+    await sql`CREATE INDEX IF NOT EXISTS discovery_evidence_company_idx ON discovery_evidence(company)`;
     await sql`CREATE INDEX IF NOT EXISTS leads_status_idx ON leads(status)`;
     await sql`CREATE INDEX IF NOT EXISTS leads_follow_up_idx ON leads(follow_up_at)`;
     await sql`CREATE INDEX IF NOT EXISTS leads_score_idx ON leads(lead_score DESC)`;
