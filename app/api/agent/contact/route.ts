@@ -3,7 +3,20 @@ import * as z from "zod/v4";
 import { ensureSchema, getSql } from "../../../../lib/db";
 
 export const runtime = "nodejs";
-export const dynamic = "force-dynamic";
+export const dynamic = "force-dynamic";\n\nconst patchInput = z.object({
+  leadId: z.string().uuid(),
+  status: z.enum(["Found","Contacted","Replied","Qualified","Proposal","Won","Lost"]).optional(),
+  nextAction: z.string().optional(),
+  followUpAt: z.string().nullable().optional(),
+  decisionMaker: z.string().optional(),
+  budget: z.string().optional(),
+  timeline: z.string().optional(),
+  urgency: z.string().optional(),
+  notes: z.string().optional(),
+  activityType: z.enum(["contact","note","status","proposal","payment"]).optional(),
+  activityBody: z.string().optional(),
+  confirmation: z.literal("approved")
+});
 
 const input = z.object({
   leadId: z.string().uuid().optional(),
@@ -82,21 +95,6 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: "Contact record unavailable" }, { status: 500 });
   }
 }
-
-const patchInput = z.object({
-  leadId: z.string().uuid(),
-  status: z.enum(["Found","Contacted","Replied","Qualified","Proposal","Won","Lost"]).optional(),
-  nextAction: z.string().optional(),
-  followUpAt: z.string().nullable().optional(),
-  decisionMaker: z.string().optional(),
-  budget: z.string().optional(),
-  timeline: z.string().optional(),
-  urgency: z.string().optional(),
-  notes: z.string().optional(),
-  activityType: z.enum(["contact","note","status","proposal","payment"]).optional(),
-  activityBody: z.string().optional(),
-  confirmation: z.literal("approved")
-});
 
 export async function PATCH(request: Request) {
   try {
