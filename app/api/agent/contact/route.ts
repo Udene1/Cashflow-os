@@ -25,7 +25,7 @@ export async function GET(request: Request) {
     const encoded = url.searchParams.get("payload");
     if (!encoded) return NextResponse.json({ error: "payload is required" }, { status: 400 });
 
-    const body = input.parse(JSON.parse(Buffer.from(encoded, "base64url").toString("utf8")));
+    const decoded = JSON.parse(Buffer.from(encoded, "base64url").toString("utf8"));\n    if (decoded?.action === "patch") {\n      const { action: _action, ...patchPayload } = decoded;\n      return PATCH(new Request(request.url, { method: "PATCH", headers: { "content-type": "application/json" }, body: JSON.stringify(patchPayload) }));\n    }\n    const body = input.parse(decoded);
     if (body.email && !z.email().safeParse(body.email).success) {
       return NextResponse.json({ error: "Invalid email" }, { status: 400 });
     }
