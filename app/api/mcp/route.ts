@@ -58,7 +58,7 @@ const handler = createMcpHandler(() => {
       const q = `%${query.trim()}%`;
       conditions.push(sql`(company ILIKE ${q} OR name ILIKE ${q} OR role ILIKE ${q} OR problem ILIKE ${q} OR source ILIKE ${q} OR notes ILIKE ${q} OR signal ILIKE ${q})`);
     }
-    const where = conditions.length ? sql`WHERE ${sql.join(conditions, sql` AND `) }` : sql``;
+    const where = conditions.length === 0 ? sql`` : conditions.length === 1 ? sql`WHERE ${conditions[0]}` : sql`WHERE ${conditions[0]} AND ${conditions[1]}`;
     const order = orderBy === "score" ? sql`lead_score DESC, updated_at DESC`
       : orderBy === "created" ? sql`created_at DESC`
       : orderBy === "lastContact" ? sql`last_contact DESC NULLS LAST, updated_at DESC`
@@ -118,7 +118,7 @@ const handler = createMcpHandler(() => {
     if (leadId) filters.push(sql`o.lead_id=${leadId}`);
     if (deliveryStatus) filters.push(sql`o.delivery_status=${deliveryStatus}`);
     if (query?.trim()) { const q = `%${query.trim()}%`; filters.push(sql`(l.company ILIKE ${q} OR l.name ILIKE ${q} OR o.recipient ILIKE ${q} OR o.subject ILIKE ${q})`); }
-    const where = filters.length ? sql`WHERE ${sql.join(filters, sql` AND `) }` : sql``;
+    const where = filters.length === 0 ? sql`` : filters.length === 1 ? sql`WHERE ${filters[0]}` : filters.length === 2 ? sql`WHERE ${filters[0]} AND ${filters[1]}` : filters.length === 3 ? sql`WHERE ${filters[0]} AND ${filters[1]} AND ${filters[2]}` : sql`WHERE ${filters[0]} AND ${filters[1]} AND ${filters[2]} AND ${filters[3]}`;
     const rows = await sql`SELECT o.id,o.lead_id AS "leadId",l.company,l.name,o.channel,o.recipient,o.subject,o.body,o.provider_message_id AS "providerMessageId",o.provider_thread_id AS "providerThreadId",o.delivery_status AS "deliveryStatus",o.bounce_reason AS "bounceReason",o.sent_at AS "sentAt",o.bounced_at AS "bouncedAt",o.created_at AS "createdAt",o.updated_at AS "updatedAt" FROM outreach_messages o JOIN leads l ON l.id=o.lead_id ${where} ORDER BY o.created_at DESC LIMIT ${limit} OFFSET ${offset}`;
     return { content: [{ type: "text", text: JSON.stringify({ rows, limit, offset }) }] };
   });
