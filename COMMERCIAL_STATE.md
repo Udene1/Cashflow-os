@@ -1,6 +1,6 @@
 # Commercial State
 
-Last updated: 2026-09-22
+Last updated: 2026-09-25
 
 This is the canonical commercial context for Cashflow OS. Read it before researching leads or writing outreach.
 
@@ -250,3 +250,42 @@ Signal -> Company -> Evidence -> Need hypothesis -> Offer mapping -> Decision ma
 
 The next improvement priority is not adding random discovery sources. First inspect real scan output, take the strongest five opportunities, research them deeply, and learn which signal categories actually produce conversations/revenue. Use those observed results to improve discovery and offer routing.
 
+## Buyer-side procurement verification pivot — 2026-09-25
+
+The procurement-signal workflow has been corrected. A tender notice is evidence that a requirement existed; it is not enough to qualify suppliers against assumptions about what the buyer still wants.
+
+For public procurement opportunities, the canonical commercial loop is now:
+
+**Public signal -> verify buyer requirement -> talk to buyer -> understand exact need/status -> identify supplier -> qualify supplier against the actual requirement -> introduce/coordinate -> deal**
+
+The buyer demand is the primary unknown. Do not spend supplier-qualification effort until buyer-side verification establishes the current requirement.
+
+Buyer-side verification should establish, where applicable:
+- whether the procurement is still active
+- whether the requirement/specification changed
+- exact goods/services required
+- quantities and technical specifications
+- approved brands/models, if any
+- delivery location and required date
+- procurement stage and submission process
+- whether vendors/bidders are still being accepted
+- supplier qualifications/documents required
+- whether financing/credit is acceptable or required
+- actual procurement owner
+- best route for a capable supplier to engage
+
+The first buyer conversation is research/qualification, not a supplier pitch. The message should identify the public procurement signal and ask to confirm the current requirement and process.
+
+### Current five procurement opportunities
+
+1. **Eleta Eye Institute — Toyota Hilux:** verify RFP PRF NG-0005-2026-ELETA, current requirement/specification, procurement owner and submission process before supplier outreach. Buyer outreach sent 2026-09-25 to eei@eletaeyefoundation.org, an institutional route; it is not represented as the direct procurement owner's address.
+2. **Yobe State Government — mixed vehicles:** verify current models/specifications, including the armored Prado, quantities, amendments, procurement owner and submission process before supplier outreach. Buyer outreach sent 2026-09-25 to yobestategovt@yobestate.govt.ng.
+3. **Gombe State AGILE-AF — school solar:** verify current 10kVA technical specification, whether all 81 schools remain in scope, installation/delivery requirements, procurement status and vendor requirements before EPC/supplier qualification. Buyer outreach sent 2026-09-25 to the published contact abdulamina10@gmail.com. A separate buyer-contact lead was created by the contact route because the stored opportunity identity did not match the named contact; reconcile this duplicate before further CRM work.
+4. **UNICEF Nigeria — nationwide inland transportation:** verify fleet/capacity, geographic coverage, experience, compliance, LTA structure and submission/next-stage process before approaching haulage providers. Buyer outreach sent 2026-09-25 to named UNGM contact Kenneth Ibezim at oibezim@unicef.org.
+5. **ANRiN 2.0 — RUTF:** verify exact RUTF specification, quantities, regulatory/certification requirements, delivery/distribution schedule, bidder eligibility and procurement status before approaching manufacturers. Buyer outreach sent 2026-09-25 to published PMU contact Dogara Okara at okaradb@gmail.com.
+
+No supplier should be represented as qualified or matched until the buyer confirms the actual requirement. Financing, insurance, supplier brand/model fit and other attached offers remain hypotheses unless the buyer confirms them.
+
+### Immediate operating state
+
+All five opportunities have buyer-side research persisted through /api/agent/research. Four buyer emails were successfully sent on the first contact pass; the Gombe contact required a new CRM contact lead because the existing opportunity lead ID did not resolve through the contact/email route, and the email was then successfully sent through that newly created contact lead. All successful sends returned Gmail message/thread IDs. Next action for each is to wait for and reconcile buyer responses, then update the opportunity with confirmed requirement/status before supplier search.
