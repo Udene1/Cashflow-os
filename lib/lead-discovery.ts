@@ -46,14 +46,16 @@ const JOB_SOURCES = [
   { name: "Remotive", url: "https://remotive.com/api/remote-jobs?limit=100" },
   { name: "Arbeitnow", url: "https://www.arbeitnow.com/api/job-board-api" },
 ];
-const COMMERCIAL_QUERIES = [
-  '"bank guarantee" OR "performance guarantee" OR "advance payment guarantee" Africa',
-  '"letter of credit" OR "trade finance" OR "import finance" Africa',
-  '"working capital" OR "financing facility" OR "project finance" Africa',
-  '"tender" OR "RFP" OR "procurement" OR "contract awarded" Africa',
-  '"expansion" OR "new facility" OR "new plant" OR "capacity" Africa',
-  '"import" OR "export" OR "shipment" OR "cargo" Africa',
-];
+const COMMERCIAL_QUERY = [
+  '"bank guarantee"', '"performance guarantee"', '"advance payment guarantee"', '"bid bond"',
+  '"standby letter of credit"', '"letter of credit"', '"trade finance"', '"import finance"', '"export finance"',
+  '"working capital"', '"debt financing"', '"project finance"', '"capital raise"', '"financing facility"',
+  '"invoice financing"', '"receivables financing"', '"supply chain finance"',
+  '"trade credit insurance"', '"credit insurance"', '"cargo insurance"', '"marine insurance"',
+  '"tender"', '"RFP"', '"procurement"', '"expression of interest"', '"contract awarded"',
+  '"partnership"', '"distribution agreement"', '"expansion"', '"new plant"', '"new factory"',
+  '"new facility"', '"capacity expansion"', '"import"', '"export"', '"shipment"', '"cargo"', '"foreign supplier"'
+].join(" OR ") + " Africa";
 
 function clean(value: unknown) {
   return String(value ?? "").replace(/<[^>]*>/g, " ").replace(/&nbsp;/g, " ").replace(/\s+/g, " ").trim();
@@ -109,27 +111,28 @@ async function collectCommercialSignals() {
     company:string; title:string; url:string; source:string; score:number; signal:string;
     description:string; publishedAt:string|null; categories:string[]; matchedRules:string[];
   }> = [];
-  for (const query of COMMERCIAL_QUERIES) {
-    try {
-      const endpoint = new URL("https://api.gdeltproject.org/api/v2/doc/doc");
-      endpoint.searchParams.set("query", query); endpoint.searchParams.set("mode","artlist"); endpoint.searchParams.set("format","json");
-      endpoint.searchParams.set("maxrecords","50"); endpoint.searchParams.set("timespan","7d");
-      const data = await fetchJson(endpoint.toString());
-      const articles = Array.isArray(data?.articles) ? data.articles as CommercialArticle[] : [];
-      for (const article of articles) {
-        const title = clean(article.title), url = clean(article.url), company = extractCompany(title);
-        if (!title || !url || !company) continue;
-        const evaluation = evaluateCommercial(title);
-        if (!evaluation.qualified) continue;
-        candidates.push({
-          company, title, url, source: `GDELT:${article.domain || "news"}`, score:evaluation.score,
-          signal:`Public commercial signal: ${evaluation.matched.join(", ")}`, description:title,
-          publishedAt: article.seendate ? article.seendate.replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/,"$1-$2-$3T$4:$5:$6Z") : null,
-          categories:evaluation.categories, matchedRules:evaluation.matched
-        });
-      }
-    } catch (error) { console.error(`Commercial discovery failed for query "${query}"`, error); }
-  }
+  try {
+    const endpoint = new URL("https://api.gdeltproject.org/api/v2/doc/doc");
+    endpoint.searchParams.set("query", COMMERCIAL_QUERY);
+    endpoint.searchParams.set("mode","artlist");
+    endpoint.searchParams.set("format","json");
+    endpoint.searchParams.set("maxrecords","80");
+    endpoint.searchParams.set("timespan","7d");
+    const data = await fetchJson(endpoint.toString());
+    const articles = Array.isArray(data?.articles) ? data.articles as CommercialArticle[] : [];
+    for (const article of articles) {
+      const title = clean(article.title), url = clean(article.url), company = extractCompany(title);
+      if (!title || !url || !company) continue;
+      const evaluation = evaluateCommercial(title);
+      if (!evaluation.qualified) continue;
+      candidates.push({
+        company, title, url, source: `GDELT:${article.domain || "news"}`, score:evaluation.score,
+        signal:`Public commercial signal: ${evaluation.matched.join(", ")}`, description:title,
+        publishedAt: article.seendate ? article.seendate.replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/,"$1-$2-$3T$4:$5:$6Z") : null,
+        categories:evaluation.categories, matchedRules:evaluation.matched
+      });
+    }
+  } catch (error) { console.error("Commercial discovery failed", error); }
   const unique = new Map<string,(typeof candidates)[number]>();
   for (const candidate of candidates) {
     const existing = unique.get(candidate.url);
