@@ -1,6 +1,6 @@
 # Commercial State
 
-Last updated: 2026-09-22
+Last updated: 2026-09-25
 
 This is the canonical commercial context for Cashflow OS. Read it before researching leads or writing outreach.
 
@@ -213,6 +213,76 @@ The OAuth refresh token is encrypted before database storage.
 ## Production configuration checkpoint
 
 2026-09-21: Triggered a production redeploy after configuring Gmail OAuth environment variables so the deployment picks up the Production-scoped values.
+
+
+
+## Expanded sellable surface and hiring-cluster signals
+
+2026-09-25: Cashflow OS is intentionally expanding beyond finance/Compflow and generic technical hiring. The discovery engine should find observable situations that can map to services Kenneth can credibly deliver.
+
+### Additional service offers that are relatively easy to discover
+
+| Observable signal | Possible offer |
+| --- | --- |
+| Multiple backend/API openings | Contract backend capacity, API work, production remediation |
+| Multiple cloud/platform/SRE openings | Cloud/DevOps capacity, reliability work, infrastructure remediation |
+| Data engineering / ETL / warehouse hiring | Data pipelines, integrations, backend/data infrastructure |
+| Integration/API/webhook hiring | API integrations, third-party integrations, automation |
+| Automation/workflow/RPA hiring | Workflow automation and internal tooling |
+| Observability/monitoring/tracing hiring | Monitoring, reliability, incident reduction |
+| Authentication/OAuth/identity hiring | Auth/authorization implementation and security hardening |
+| Security/compliance hiring | Security implementation, evidence/control work, Compflow where genuinely relevant |
+| Rapid broad technical hiring | Temporary engineering capacity / project delivery |
+| Funding round plus hiring | Infrastructure scaling, engineering capacity, security/compliance, integrations |
+| Contract award | Guarantees, working capital, trade finance, insurance, implementation capacity |
+| New plant/facility/capacity expansion | Project finance, guarantees, insurance, technology/infrastructure |
+| Import/export/supplier activity | LC/SBLC, trade finance, cargo/marine insurance, working capital |
+| Tender/RFP/EOI | Bid bond/guarantee, implementation services, subcontracting/technical delivery |
+| Acquisition/merger | System integration, migration, data/backend work, security and access-control work |
+| New international market | Trade finance, insurance, integrations, cloud/security/compliance |
+
+These are opportunity mappings, not claims that the company needs the offer. Verify the event and the actual need before outreach.
+
+### Hiring density is now a signal
+
+A single job posting can be weak evidence. A cluster of relevant openings at the same company can indicate capacity expansion, a new product/project, infrastructure scaling, or another growth phase.
+
+The discovery engine now groups relevant job candidates by company and adds a deterministic hiring-cluster bonus:
+- 2+ relevant openings: +6
+- 4+ relevant openings: +12
+- 6+ relevant openings: +18
+- 10+ relevant openings: +25
+
+The lead remains grounded in the actual job evidence. The cluster is an additional observed signal, not an AI-generated conclusion.
+
+The next research question for a hiring cluster is:
+1. What roles are being added?
+2. Are they concentrated in backend, cloud, data, security, integrations, product, or operations?
+3. Is there a funding, expansion, product launch, acquisition, or contract signal nearby?
+4. Who owns the work?
+5. What temporary or specialist work could Kenneth credibly take on?
+6. Is there a finance/trade/insurance opportunity in parallel?
+
+### Why AI can still be useful without making discovery dependent on it
+
+Discovery should remain deterministic and provenance-preserving. AI can be added later as a **research/routing layer** after evidence is collected.
+
+For example:
+- deterministic source finds 12 openings
+- deterministic engine groups them into a hiring cluster
+- deterministic engine records funding/contract/expansion evidence
+- AI then summarizes the evidence, proposes several testable need hypotheses, identifies likely owner roles, and maps candidate offers
+- human verification decides what is actually true before outreach
+
+This keeps AI from inventing demand while still using it where language-heavy synthesis is genuinely useful.
+
+### Commercial funnel extension
+
+The intended model is now:
+
+Signal -> Evidence -> Company -> Signal cluster -> Need hypotheses -> Offer candidates -> Owner -> Verified contact -> Conversation -> Opportunity -> Revenue.
+
+A company can produce multiple parallel opportunities. Do not collapse the company into one product or one lead.
 
 ## Commercial signal discovery engine
 
