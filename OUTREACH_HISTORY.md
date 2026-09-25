@@ -42,7 +42,7 @@ Cashflow OS production currently contains the older contacted lead records and n
 | Person / route | Company | Role | Actual channel | Contact detail | Status |
 |---|---|---|---|---|---|
 | Eleta Eye Institute procurement/operations team | Eleta Eye Institute | Procurement / Operations | Email | eei@eletaeyefoundation.org | Sent; awaiting buyer confirmation |
-| Office of the Secretary to the State Government | Yobe State Government | Procurement / Admin and General Services | Email | yobestategovt@yobestate.govt.ng | Sent; awaiting buyer confirmation |
+| Office of the Secretary to the State Government | Yobe State Government | Procurement / Admin and General Services | Email | yobestategovt@yobestate.govt.ng | Sent; bounced |
 | Dr. Amina Haruna Abdul | Gombe State AGILE-AF | GOMBE AGILE ADF / Procurement contact | Email | abdulamina10@gmail.com | Sent; awaiting buyer confirmation |
 | Kenneth Ibezim | UNICEF Nigeria | Procurement / Supply & Logistics | Email | oibezim@unicef.org | Sent; awaiting buyer confirmation |
 | Dogara Okara | ANRiN 2.0 Project Management Unit | Procurement / Nutrition Programme | Email | okaradb@gmail.com | Sent; awaiting buyer confirmation |
@@ -50,3 +50,8 @@ Cashflow OS production currently contains the older contacted lead records and n
 These messages were buyer-side qualification/research, not supplier pitches. Each asked whether the procurement remains active and requested current requirement/status, procurement ownership and engagement/submission details. Supplier qualification is intentionally deferred until buyer confirmation.
 
 The five successful sends returned Gmail message/thread IDs through Cashflow OS. The Gombe email was sent from a newly created buyer-contact lead because the existing opportunity lead did not resolve through the contact/email route; this CRM duplicate must be reconciled before further activity.
+
+
+### Yobe bounce and alternate route — 2026-09-25
+
+The initial message to yobestategovt@yobestate.govt.ng generated a Delivery Status Notification (Failure). The next action was changed to another verified institutional route. A second buyer-side qualification message was sent to info@ssgoffice-yobe.com, asking that it be routed to the officer responsible for the tender if the recipient is not the procurement owner.
