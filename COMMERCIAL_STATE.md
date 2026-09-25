@@ -213,3 +213,40 @@ The OAuth refresh token is encrypted before database storage.
 ## Production configuration checkpoint
 
 2026-09-21: Triggered a production redeploy after configuring Gmail OAuth environment variables so the deployment picks up the Production-scoped values.
+
+## Commercial signal discovery engine
+
+2026-09-25: Cashflow OS now has a deterministic daily commercial-signal discovery layer in addition to the existing hiring/technical lead discovery.
+
+The daily discovery job runs from `/api/cron/lead-discovery` at 06:00 UTC and calls `runLeadDiscovery()`. It combines:
+- Remotive and Arbeitnow hiring/technical signals.
+- GDELT public commercial-event signals from the previous 7 days.
+
+Commercial signal categories currently include:
+- trade finance: LC, SBLC, import/export finance
+- guarantees: bank, performance, advance-payment guarantees, bid bonds
+- financing: working capital, debt/project finance, financing facilities, invoice/receivables/supply-chain finance
+- insurance: trade credit, credit, cargo, marine insurance
+- procurement: tenders, RFPs, procurement, EOIs
+- contract awards
+- expansion: partnerships/distribution agreements, new plants/facilities, capacity expansion
+- import/export: imports, exports, shipments, cargo, foreign suppliers
+
+The engine stores provenance in `discovery_evidence`, deduplicates by source URL, respects deleted-lead suppression, and creates `Found` leads without contacting prospects.
+
+Important operating interpretation:
+This is a signal-driven general commercial lead engine, not a product-first Compflow finder. A detected event is evidence to investigate, not proof of pain. For every promising signal, the agent should establish:
+1. observed event/evidence
+2. likely commercial need (hypothesis)
+3. likely owner/decision-maker
+4. legitimate offer(s) that match the need
+5. verified contact route
+6. discovery question / next action
+
+Offer routing must remain broad: LC/SBLC, bank/performance/advance-payment guarantees, bid bonds, trade finance, working capital/project/import/export/receivables finance, relevant insurance, backend engineering, cloud/DevOps, reliability, security, integrations, automation, compliance implementation, Compflow, or other credible paid work. Do not assume Compflow is the offer.
+
+Next operating loop:
+Signal -> Company -> Evidence -> Need hypothesis -> Offer mapping -> Decision maker -> Contact -> Conversation -> Opportunity -> Revenue.
+
+The next improvement priority is not adding random discovery sources. First inspect real scan output, take the strongest five opportunities, research them deeply, and learn which signal categories actually produce conversations/revenue. Use those observed results to improve discovery and offer routing.
+
