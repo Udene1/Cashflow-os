@@ -8,7 +8,7 @@ type Job = {
 type CommercialArticle = { title?: string; url?: string; seendate?: string; domain?: string; language?: string; };
 type SignalRule = {
   pattern: RegExp; points: number;
-  category: "compliance"|"incident"|"migration"|"security"|"infrastructure"|"hiring"|"trade_finance"|"guarantee"|"financing"|"insurance"|"procurement"|"contract_award"|"expansion"|"import_export";
+  category: "compliance"|"incident"|"migration"|"security"|"infrastructure"|"hiring"|"data"|"integration"|"automation"|"observability"|"auth"|"trade_finance"|"guarantee"|"financing"|"insurance"|"procurement"|"contract_award"|"expansion"|"import_export";
   label: string;
 };
 
@@ -24,6 +24,11 @@ const JOB_RULES: SignalRule[] = [
   { pattern: /\bmigrat(?:e|ed|ing|ion)\b|\bcutover\b|\bcloud migration\b/i, points: 28, category: "migration", label: "migration" },
   { pattern: /\bvulnerabilit(?:y|ies)\b|\bremediation\b|\bsecurity operations\b|\bsecurity engineering\b/i, points: 28, category: "security", label: "security operations" },
   { pattern: /\bproduction infrastructure\b|\bplatform engineering\b|\bsite reliability\b|\bsre\b/i, points: 22, category: "infrastructure", label: "production infrastructure" },
+  { pattern: /\bdata engineer(?:ing)?\b|\betl\b|\bdata pipeline\b|\bdata warehouse\b|\bdbt\b|\banalytics engineer(?:ing)?\b/i, points: 24, category: "data", label: "data engineering" },
+  { pattern: /\bapi integration\b|\bintegration engineer(?:ing)?\b|\bthird[- ]party integration\b|\bwebhooks?\b|\bsystem integration\b/i, points: 26, category: "integration", label: "integration work" },
+  { pattern: /\bworkflow automation\b|\bprocess automation\b|\brpa\b|\bautomate(?:d|ing)? workflows?\b/i, points: 24, category: "automation", label: "automation" },
+  { pattern: /\bobservability\b|\bdistributed tracing\b|\bmetrics\b|\blogging\b|\bmonitoring\b/i, points: 22, category: "observability", label: "observability" },
+  { pattern: /\bauthentication\b|\bauthorization\b|\boauth\b|\bidentity\b|\baccess control\b/i, points: 24, category: "auth", label: "authentication/authorization" },
   { pattern: /\bsecurity\b|\bcompliance\b|\bgovernance\b|\brisk\b/i, points: 12, category: "hiring", label: "security/compliance hiring" },
 ];
 
@@ -32,7 +37,7 @@ const COMMERCIAL_RULES: SignalRule[] = [
   { pattern: /\bletter of credit\b/i, points: 50, category: "trade_finance", label: "letter of credit" },
   { pattern: /\bbank guarantee\b|\bperformance guarantee\b|\badvance payment guarantee\b|\bbid bond\b/i, points: 55, category: "guarantee", label: "bank guarantee/bond" },
   { pattern: /\btrade finance\b|\btrade financing\b|\bimport finance\b|\bexport finance\b/i, points: 50, category: "trade_finance", label: "trade finance" },
-  { pattern: /\bworking capital\b|\bdebt financing\b|\bproject finance\b|\bcapital raise\b|\bfinancing facility\b/i, points: 42, category: "financing", label: "financing" },
+  { pattern: /\bworking capital\b|\bdebt financing\b|\bproject finance\b|\bcapital raise\b|\bfinancing facility\b|\bfunding round\b|\braises?\b.{0,40}\b(?:million|billion|capital)\b/i, points: 42, category: "financing", label: "financing/growth capital" },
   { pattern: /\binvoice financing\b|\breceivables financing\b|\bsupply chain finance\b/i, points: 48, category: "financing", label: "receivables/supply-chain finance" },
   { pattern: /\btrade credit insurance\b|\bcredit insurance\b|\bcargo insurance\b|\bmarine insurance\b/i, points: 45, category: "insurance", label: "trade/credit insurance" },
   { pattern: /\btender\b|\bprocurement\b|\brequest for proposal\b|\bRFP\b|\bexpression of interest\b/i, points: 38, category: "procurement", label: "procurement/tender" },
@@ -40,6 +45,7 @@ const COMMERCIAL_RULES: SignalRule[] = [
   { pattern: /\bsigns?\b.{0,80}\bagreement\b|\bpartnership\b|\bdistribution agreement\b/i, points: 32, category: "expansion", label: "new commercial agreement" },
   { pattern: /\bexpands?\b|\bexpansion\b|\bnew plant\b|\bnew factory\b|\bnew facility\b|\bcapacity expansion\b/i, points: 35, category: "expansion", label: "business expansion" },
   { pattern: /\bimport(?:s|ed|ing)?\b|\bexport(?:s|ed|ing)?\b|\bshipment\b|\bcargo\b|\bforeign supplier\b/i, points: 32, category: "import_export", label: "import/export activity" },
+  { pattern: /\bacquisition\b|\bacquires?\b|\bmerger\b|\bmerges?\b/i, points: 36, category: "expansion", label: "M&A/integration event" },
 ];
 
 const JOB_SOURCES = [
@@ -69,7 +75,7 @@ function evaluateJob(job: Job) {
   const text = clean([job.title, job.description, job.tags?.join(" ")].join(" "));
   const matched = JOB_RULES.filter((rule) => rule.pattern.test(text));
   const categories = new Set(matched.map((rule) => rule.category));
-  const directIntent = matched.some((rule) => ["SOC 2","ISO 27001","DORA","audit","evidence","GRC","incident/postmortem"].includes(rule.label));
+  const directIntent = matched.some((rule) => ["SOC 2","ISO 27001","DORA","audit","evidence","GRC","incident/postmortem","data engineering","integration work","automation","observability","authentication/authorization"].includes(rule.label));
   const score = Math.min(100, matched.reduce((total, rule) => total + rule.points, 0) + (job.remote ? 3 : 0));
   return { score, qualified: directIntent || categories.size >= 2, matched: matched.map((r) => r.label).slice(0, 8), categories: [...categories] };
 }
@@ -104,7 +110,24 @@ async function collectJobs() {
       for (const job of Array.isArray(jobs) ? jobs : []) { const item = normalizeJob(job, source.name); if (item) candidates.push(item); }
     } catch (error) { console.error(`${source.name} discovery failed`, error); }
   }
-  return candidates;
+  const byCompany = new Map<string, typeof candidates>();
+  for (const candidate of candidates) {
+    const key = candidate.company.toLowerCase();
+    const group = byCompany.get(key) || [];
+    group.push(candidate);
+    byCompany.set(key, group);
+  }
+  return candidates.map((candidate) => {
+    const count = byCompany.get(candidate.company.toLowerCase())?.length || 1;
+    const clusterBonus = count >= 10 ? 25 : count >= 6 ? 18 : count >= 4 ? 12 : count >= 2 ? 6 : 0;
+    const clusterSignal = count >= 2 ? `Hiring cluster: ${count} relevant openings found in the current scan` : "";
+    return {
+      ...candidate,
+      score: Math.min(100, candidate.score + clusterBonus),
+      signal: [candidate.signal, clusterSignal].filter(Boolean).join("; "),
+      description: [candidate.description, clusterSignal].filter(Boolean).join(" ")
+    };
+  }).sort((a,b)=>b.score-a.score);
 }
 async function collectCommercialSignals() {
   const candidates: Array<{
