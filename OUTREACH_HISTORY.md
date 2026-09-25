@@ -2,7 +2,7 @@
 
 Canonical reconciliation of actual commercial outreach. Channel is recorded because response rate by channel matters.
 
-Last reconciled: 2026-09-21.
+Last reconciled: 2026-09-25.
 
 | Person | Company | Role | Actual channel | Contact detail | Status |
 |---|---|---|---|---|---|
@@ -36,3 +36,17 @@ Last reconciled: 2026-09-21.
 ## Production sync
 
 Cashflow OS production currently contains the older contacted lead records and newer contacts are not all represented as leads. The API has been updated in GitHub to support channel-aware outreach records and creation of missing contacts. Production CRM synchronization must be verified through the live API after deployment.
+
+## Buyer-side procurement verification outreach — 2026-09-25
+
+| Person / route | Company | Role | Actual channel | Contact detail | Status |
+|---|---|---|---|---|---|
+| Eleta Eye Institute procurement/operations team | Eleta Eye Institute | Procurement / Operations | Email | eei@eletaeyefoundation.org | Sent; awaiting buyer confirmation |
+| Office of the Secretary to the State Government | Yobe State Government | Procurement / Admin and General Services | Email | yobestategovt@yobestate.govt.ng | Sent; awaiting buyer confirmation |
+| Dr. Amina Haruna Abdul | Gombe State AGILE-AF | GOMBE AGILE ADF / Procurement contact | Email | abdulamina10@gmail.com | Sent; awaiting buyer confirmation |
+| Kenneth Ibezim | UNICEF Nigeria | Procurement / Supply & Logistics | Email | oibezim@unicef.org | Sent; awaiting buyer confirmation |
+| Dogara Okara | ANRiN 2.0 Project Management Unit | Procurement / Nutrition Programme | Email | okaradb@gmail.com | Sent; awaiting buyer confirmation |
+
+These messages were buyer-side qualification/research, not supplier pitches. Each asked whether the procurement remains active and requested current requirement/status, procurement ownership and engagement/submission details. Supplier qualification is intentionally deferred until buyer confirmation.
+
+The five successful sends returned Gmail message/thread IDs through Cashflow OS. The Gombe email was sent from a newly created buyer-contact lead because the existing opportunity lead did not resolve through the contact/email route; this CRM duplicate must be reconciled before further activity.
