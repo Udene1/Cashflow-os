@@ -3,6 +3,7 @@ import * as z from "zod/v4";
 import { ensureSchema, getSql } from "../../../lib/db";
 import { auditMcp, ensureResearchSchema, saveResearch } from "../../../lib/research";
 import { sendGmailMessage } from "../../../lib/gmail";
+import { runLeadDiscovery } from "../../../lib/lead-discovery";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -13,6 +14,36 @@ const handler = createMcpHandler(() => {
     { name: "cashflow-os", version: "0.3.0" },
     { capabilities: { tools: {} } }
   );
+
+  server.registerTool("cashflow_run_discovery", {
+    description: "Run deterministic fresh-lead discovery. Pulls hiring and public commercial-event signals, stores provenance, and creates deduplicated Found leads. Never contacts prospects.",
+    inputSchema: z.object({ confirmation })
+  }, async ({ confirmation: _ }) => {
+    const result = await runLeadDiscovery();
+    return { content: [{ type: "text", text: JSON.stringify(result) }] };
+  });
+
+  server.registerTool("cashflow_list_commercial_signals", {
+    description: "List commercial-event evidence before outreach. Filter by company, category, minimum score, and source. Covers LC, BG, financing, insurance, tenders, contract awards, expansion, and import/export signals.",
+    inputSchema: z.object({
+      company: z.string().optional(),
+      category: z.string().optional(),
+      minScore: z.number().int().min(0).max(100).default(0),
+      source: z.string().optional(),
+      limit: z.number().int().min(1).max(200).default(100),
+      offset: z.number().int().min(0).default(0)
+    })
+  }, async ({ company, category, minScore, source, limit, offset }) => {
+    await ensureSchema(); const sql = getSql();
+    const filters = [sql`score >= ${minScore}`];
+    if (company?.trim()) filters.push(sql`company ILIKE ${`%${company.trim()}%`}`);
+    if (category?.trim()) filters.push(sql`categories ILIKE ${`%${category.trim()}%`}`);
+    if (source?.trim()) filters.push(sql`source ILIKE ${`%${source.trim()}%`}`);
+    const where = sql`WHERE ${filters[0]} AND ${filters[1] ?? sql`TRUE`} AND ${filters[2] ?? sql`TRUE`} AND ${filters[3] ?? sql`TRUE`}`;
+    const rows = await sql`SELECT id,company,role,source,source_url AS "sourceUrl",signal,description,published_at AS "publishedAt",score,matched_rules AS "matchedRules",categories,discovered_at AS "discoveredAt" FROM discovery_evidence ${where} ORDER BY score DESC, published_at DESC NULLS LAST, discovered_at DESC LIMIT ${limit} OFFSET ${offset}`;
+    const count = await sql`SELECT COUNT(*)::int AS count FROM discovery_evidence ${where}`;
+    return { content: [{ type: "text", text: JSON.stringify({ rows, total: count[0]?.count ?? 0, limit, offset }) }] };
+  });
 
   server.registerTool("cashflow_get_commercial_snapshot", {
     description: "Return a live commercial snapshot: lead counts by status, outreach counts, inbound replies, research coverage, follow-ups due, and Gmail connection status.",
