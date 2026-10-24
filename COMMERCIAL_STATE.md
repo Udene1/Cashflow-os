@@ -330,3 +330,9 @@ Keep employment applications distinct from service-sales outreach. Use the live 
 - **Devinity Solutions — Node.js Backend Engineer:** no reply reported as of 2026-10-24.
 - **Credlock — Backend Engineer (Node.js/NestJS):** contact via official WhatsApp confirmed by Kenneth; no reply reported as of 2026-10-24. CRM record ID: `5d84837a-e95b-4167-9d2f-364bfd1ea396`.
 - Do not interpret an acknowledgement or contact as an interview, offer, or income.
+
+
+### Application pipeline update — 2026-10-24
+- **PTING Cloud — Backend Engineer (NestJS):** Kenneth confirmed he sent the inquiry through the official contact form. The inquiry asks whether the role is still open and how to submit a CV and portfolio. This is an inquiry only; no CV submission, reply, interview, offer, or payment is confirmed. Official careers page: https://pting.cloud/careers. Next action: wait up to 5 business days, then follow up once through the official contact route if there is no response.
+- **Reliance Health — Backend Software Engineer:** do not proceed with the application for now. Kenneth says he does not have an NYSC certificate. The current application form asks whether the applicant completed NYSC or holds a valid exemption certificate and requires an upload, so this application is blocked unless the employer confirms an acceptable alternative. Do not imply a certificate or exemption exists.
+- CRM persistence for the PTING inquiry still needs verification; do not assume a CRM record was created.
