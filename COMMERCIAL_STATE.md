@@ -289,3 +289,25 @@ No supplier should be represented as qualified or matched until the buyer confir
 ### Immediate operating state
 
 All five opportunities have buyer-side research persisted through /api/agent/research. Four buyer emails were successfully sent on the first contact pass; the Yobe primary address bounced and an alternate institutional route was then contacted; the Gombe contact required a new CRM contact lead because the existing opportunity lead ID did not resolve through the contact/email route, and the email was then successfully sent through that newly created contact lead. All successful sends returned Gmail message/thread IDs. Next action for each is to wait for and reconcile buyer responses, then update the opportunity with confirmed requirement/status before supplier search.
+
+
+## Employment application tracking — 2026-10-24
+
+Keep employment applications distinct from service-sales outreach. Use the live CRM as the activity record and this section as a compact recovery checkpoint. Do not infer an interview, response, offer, or income from an application submission.
+
+### Confirmed applications
+- **Kuvra — Backend Engineer:** Kenneth confirmed submission on 2026-10-24. CRM application record ID: `e1c3135e-25d8-445b-b2ab-79873b7ffc1e`. Status: Contacted (application submitted). Next action: wait for acknowledgement; if none after 5 business days, verify status and follow up through the official route.
+- **Linestech Solutions — Full-stack Engineer:** Kenneth confirmed successful submission on 2026-10-24. CRM application record ID: `d5dd6271-764d-454e-938e-e3bd8d7f4d51`. Status: Contacted (application submitted). Next action: wait for acknowledgement; if none after 5 business days, verify status and follow up through the official route.
+- Neither employer has a confirmed reply, interview, offer, or payment as of this checkpoint.
+- Kuvra also has an older service-sales outreach record (`b1561106-cb80-49c6-8e79-86c0fdc41157`). Keep that separate from the job application record; do not confuse the two purposes.
+
+### Next application candidate
+- **Devinity Solutions LLC — Node.js Backend Engineer:** official role page was live on 2026-10-24 at https://www.devinitysolutions.com/careers/nodejs-backend-engineer. The page describes a remote full-time TypeScript/Node.js/PostgreSQL role focused on API services, SQL/data modelling, integrations, queues/background processing, observability, and explicit failure handling.
+- Apply via the role page's “Apply for this role” link. The public page's email link is protected/obfuscated in automated page extraction, so do not guess an email address. Confirm during the application process whether Nigeria-based applicants are eligible; the page says remote but does not explicitly list hiring countries.
+- The role asks applicants to explain what they built and why it was difficult. A grounded example is Cashflow OS's distinction between a CRM record and a real email send: the sending route checks the stored lead identity and verified recipient, sends through Gmail, persists the Gmail message/thread IDs and activity, and includes a short-window duplicate guard. Describe only the work Kenneth can personally substantiate.
+- The company careers page warns about recruitment fraud: it says it does not recruit by text message and never asks candidates for money. Never pay an application or recruitment fee.
+- Micro1 is excluded by Kenneth because he does not consider it a good fit / credible opportunity. Do not return to it unless he explicitly reopens it.
+
+### Cashflow OS live-state caution — 2026-10-24
+- Production `GET /api/leads` returned 220 CRM records and confirmed the Kuvra and Linestech application records above.
+- The production homepage HTML still displayed zero counters and “0 discovered leads in pipeline” despite the live API returning records. Treat the overview counters as unreliable until the UI/data-hydration mismatch is investigated. Use the live API/CRM records for state verification; do not interpret homepage zeros as an empty database.
