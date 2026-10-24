@@ -345,3 +345,8 @@ Keep employment applications distinct from service-sales outreach. Use the live 
 
 ### Application status update — 2026-10-24
 - **Wildfire NG — Backend Developer (3-month remote contract):** Kenneth confirmed he sent the application email. Status: Contacted (application sent). The listing requested a portfolio and expected rate; the email asked the company to clarify stack, deliverables, and weekly commitment before a rate is finalized. No reply, interview, offer, or payment is confirmed. Next action: wait for a response; if none after 5 business days, follow up once through the official email route.
+
+### Application status update — 2026-10-24
+- **Sage Grey Technologies — Full-stack Developer (React.js + Node.js, remote contract):** Kenneth confirmed he sent the inquiry/application email. Status: Contacted (email sent). The message asked whether the role is open and requested immediate priorities, contract duration, and working arrangement. No reply, interview, offer, or payment is confirmed.
+- The vacancy is advertised through 2026-10-31 on a third-party job board; the employer's official site has a careers page but the specific vacancy was not independently visible there at time of checking. Verify the vacancy and terms before sharing further sensitive information or accepting an offer. Never pay recruitment fees.
+- Next action: wait for a response; if none after 5 business days, follow up once through the official company route.
