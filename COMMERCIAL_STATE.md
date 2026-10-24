@@ -322,3 +322,11 @@ Keep employment applications distinct from service-sales outreach. Use the live 
 - The official careers page provides a WhatsApp application route. It resolves to `wa.me/2349034442555` with a prefilled backend-role inquiry. Use it to ask the hiring team to confirm the role is still open and the formal CV submission route; don't assume this is already a submitted application.
 - Fit: Node.js/TypeScript/API and fintech-adjacent experience are relevant. MongoDB/NestJS are gaps relative to the supplied CV (which emphasizes PostgreSQL/Prisma); be transparent. The public official page does not specify years of experience. Older LinkedIn postings for separate senior backend roles may be closed, so don't import their requirements as if they apply to this currently listed role.
 - Safety: do not pay application/recruitment fees. Wait for a response from the official route before sending sensitive documents.
+
+
+### Application status update — 2026-10-24
+- **Linestech Solutions — Full-stack Engineer:** Kenneth reports the company acknowledged the application and said its team will review it. CRM record ID: `d5dd6271-764d-454e-938e-e3bd8d7f4d51`; status updated to Replied (acknowledgement only). No interview or offer confirmed. Wait for the review; follow up politely if there is no update after a reasonable interval.
+- **Kuvra — Backend Engineer:** no reply reported as of 2026-10-24.
+- **Devinity Solutions — Node.js Backend Engineer:** no reply reported as of 2026-10-24.
+- **Credlock — Backend Engineer (Node.js/NestJS):** contact via official WhatsApp confirmed by Kenneth; no reply reported as of 2026-10-24. CRM record ID: `5d84837a-e95b-4167-9d2f-364bfd1ea396`.
+- Do not interpret an acknowledgement or contact as an interview, offer, or income.
