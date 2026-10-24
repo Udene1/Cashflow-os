@@ -311,3 +311,14 @@ Keep employment applications distinct from service-sales outreach. Use the live 
 ### Cashflow OS live-state caution — 2026-10-24
 - Production `GET /api/leads` returned 220 CRM records and confirmed the Kuvra and Linestech application records above.
 - The production homepage HTML still displayed zero counters and “0 discovered leads in pipeline” despite the live API returning records. Treat the overview counters as unreliable until the UI/data-hydration mismatch is investigated. Use the live API/CRM records for state verification; do not interpret homepage zeros as an empty database.
+
+
+### Confirmed application update — 2026-10-24 evening
+- **Devinity Solutions — Node.js Backend Engineer:** Kenneth confirmed the application was sent. CRM record ID: `0370d5f7-8332-45f6-bfaa-98a570322e40`. Status: Contacted (application submitted). No reply, interview, offer, or payment is confirmed. Follow up on 2026-10-31 if no acknowledgement; Nigeria eligibility was asked about but remains unconfirmed.
+- Keep the status limited to what Kenneth confirmed; don't infer the email was received or opened.
+
+### Next candidate: Credlock — Backend Engineer (Node.js/NestJS)
+- Official careers page: https://credlockng.com/careers — checked 2026-10-24. It currently lists a full-time Backend Engineer (Node.js/NestJS) role as Lagos / Remote and describes secure/scalable APIs for a device-collateral credit platform; stack tags include Node.js, TypeScript, MongoDB, Security.
+- The official careers page provides a WhatsApp application route. It resolves to `wa.me/2349034442555` with a prefilled backend-role inquiry. Use it to ask the hiring team to confirm the role is still open and the formal CV submission route; don't assume this is already a submitted application.
+- Fit: Node.js/TypeScript/API and fintech-adjacent experience are relevant. MongoDB/NestJS are gaps relative to the supplied CV (which emphasizes PostgreSQL/Prisma); be transparent. The public official page does not specify years of experience. Older LinkedIn postings for separate senior backend roles may be closed, so don't import their requirements as if they apply to this currently listed role.
+- Safety: do not pay application/recruitment fees. Wait for a response from the official route before sending sensitive documents.
