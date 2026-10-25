@@ -377,3 +377,8 @@ These are service/contract-capacity conversations, separate from job application
 
 ### Outreach status update — 2026-10-25
 - **Musskart Technology:** Kenneth confirmed sending the WhatsApp message to the published company contact route (+234 813 168 6721). The inquiry asked whether Musskart engages independent backend/systems engineers for paid contract support on client deliveries. This is an initial company-contact inquiry, not a conversation with a confirmed engineering decision-maker. No reply, active project, offer, or payment is confirmed. Next action: wait up to 5 business days before one follow-up; do not send duplicates.
+
+
+### Next prospect researched — 2026-10-25
+- **MAPL TECH:** its official careers page lists a Nigeria-based Cloud / DevOps Engineer role as “Lagos / Remote Contract” supporting cloud infrastructure, CI/CD pipelines, and monitoring for agency clients; it also lists a Nigeria remote-contract Full-Stack Developer role. This is stronger evidence of contract delivery activity than a generic agency capability page, though it does not prove an immediate paid assignment is available. Official page: https://mapltech.com/careers. Published contact: contact@mapltech.com.
+- Potential approach: ask whether the Cloud/DevOps contract work is active and whether they consider scoped independent contractors for infrastructure/CI/CD tasks. Do not claim contacted; no outreach confirmed yet. Distinguish this from the paused conventional job-application pipeline.
