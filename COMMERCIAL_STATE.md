@@ -360,3 +360,12 @@ Keep employment applications distinct from service-sales outreach. Use the live 
 ### Outreach status update — 2026-10-24
 - **Pintop Technologies — Backend Engineer:** Kenneth confirmed sending the hiring-team inquiry via the company's official WhatsApp route (+234 813 826 9064). Status: Contacted (WhatsApp inquiry sent). The message asked whether the listed role remains open and requested connection to the engineering recruitment owner. No reply, interview, offer, or payment is confirmed.
 - Next action: wait for a response; if none after 3 business days, send one concise follow-up via the same official route. Do not send duplicate messages before then.
+
+
+## Contract engineering outreach — 2026-10-25
+
+These are service/contract-capacity conversations, separate from job applications. They are not confirmed opportunities until a prospect identifies real work and terms.
+
+- **Nivarix Technologies:** Kenneth confirmed he contacted the company. The outreach explored paid contract engineering/overflow work. Exact channel and send timestamp not recorded here. No reply, active project, interview, offer, or payment confirmed. Next action: wait for response; avoid duplicate outreach for at least 3 business days.
+- **Emicraft:** Kenneth confirmed he sent the email to the published general inbox admin@emicrafttech.com. Subject: “Backend Engineering Support — Contract Opportunities.” The message offered backend/API, database, integration, cloud deployment and production-reliability support on a paid contract basis, and asked whether Emicraft engages independent engineers or has an upcoming project. No reply, active project, interview, offer, or payment confirmed. Because this was a general inbox, the intended owner is Emicraft's team responsible for engineering delivery/contract capacity; actual recipient was admin@emicrafttech.com. Next action: wait up to 5 business days, then one concise follow-up if no reply.
+- **Next prospect researched: Blessed Creation:** its official site describes white-label development for agencies, dedicated developers, custom web applications, and cloud/DevOps work; published contact is contact@blessedcreation.org and +234 902 383 1823. This is a plausible subcontracting/overflow-capacity route, not proof they need another engineer now. Official page: https://blessedcreation.org/what-we-do/. Before outreach, frame the question around whether they ever bring in independent backend/DevOps capacity; do not claim a specific open project.
