@@ -395,3 +395,9 @@ These are service/contract-capacity conversations, separate from job application
 
 ### Outreach status update — 2026-10-25
 - **Promudi AI:** Kenneth confirmed sending an email to support@promudi.ai, subject “Question About Scoped Backend Engineering Support.” The message referenced the company's public engineering expansion and asked whether the engineering team would consider an independent engineer for a scoped, paid backend/API/reliability task; it requested routing to the engineering owner. This was sent to a support inbox, not a verified direct owner. No reply, project, offer, or payment confirmed. Next action: wait up to 5 business days, then one follow-up if no response.
+
+
+### Next prospect researched — 2026-10-25: ProStack NG Technologies
+- Official site identifies ProStack NG as a Port Harcourt-based Nigerian technology company with 20+ clients served, multiple live products, a shared backend/API/payment/notification infrastructure, and managed-services offerings covering uptime, maintenance, security patches, monitoring, and bug fixes. Public contact route: contact@prostackng.com.ng; WhatsApp +234 705 944 9360. Sources: https://prostackng.com.ng/ and https://prostackng.com.ng/managed-services.
+- Why it merits qualification: multi-product platform and managed-services delivery create a plausible need for additional backend/infrastructure capacity. This is an inference, not confirmed demand. A useful first question is whether they ever subcontract a scoped backend, integration, deployment, or reliability task to an independent engineer during product/client delivery.
+- No outreach sent yet. Prefer a short WhatsApp/email asking about project-based collaboration and routing to the person responsible for engineering delivery; don't assume an active opening or present this as a job application.
