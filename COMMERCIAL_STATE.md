@@ -382,3 +382,7 @@ These are service/contract-capacity conversations, separate from job application
 ### Next prospect researched — 2026-10-25
 - **MAPL TECH:** its official careers page lists a Nigeria-based Cloud / DevOps Engineer role as “Lagos / Remote Contract” supporting cloud infrastructure, CI/CD pipelines, and monitoring for agency clients; it also lists a Nigeria remote-contract Full-Stack Developer role. This is stronger evidence of contract delivery activity than a generic agency capability page, though it does not prove an immediate paid assignment is available. Official page: https://mapltech.com/careers. Published contact: contact@mapltech.com.
 - Potential approach: ask whether the Cloud/DevOps contract work is active and whether they consider scoped independent contractors for infrastructure/CI/CD tasks. Do not claim contacted; no outreach confirmed yet. Distinguish this from the paused conventional job-application pipeline.
+
+
+### Outreach status update — 2026-10-25
+- **MAPL TECH — Cloud / DevOps contract inquiry:** Kenneth confirmed sending the email to contact@mapltech.com, subject “Cloud/DevOps Contract Work — Project-Based Engineering Support.” The email referenced the published Nigeria-remote contract listing and asked whether it remains active and whether MAPL would consider an independent engineer for a scoped project or client delivery. This is an inquiry only; no response, confirmed project, offer, or payment. Next action: wait up to 5 business days, then follow up once if no response.
