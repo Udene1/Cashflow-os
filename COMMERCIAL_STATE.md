@@ -405,3 +405,7 @@ These are service/contract-capacity conversations, separate from job application
 
 ### Outreach status update — 2026-10-25
 - **ProStack NG Technologies:** Kenneth reports the published WhatsApp number was not available on WhatsApp, so he sent the inquiry by email instead. Channel: Email. Recipient: contact@prostackng.com.ng. The inquiry concerns possible paid, scoped backend, integration, deployment, or reliability work and asks whether independent engineers are engaged or whether the message can be routed to the person responsible for engineering delivery. No reply, active project, offer, or payment is confirmed. Next action: wait up to 5 business days, then follow up once if there is no response. Do not send a duplicate through another channel before then.
+
+
+### Outreach status update — 2026-10-26
+- **Vikkymediatech Web World — Backend Engineer (Node.js) contract inquiry:** Kenneth confirmed sending an email to the company's published contact, hello@vikkymediatech.com. Subject: “Backend Engineer Contract — Scope and Availability.” The message asked whether the advertised contract role is still open and requested the deliverables, technologies, weekly commitment, duration, and budgeted compensation range. It also linked Kenneth's GitHub and LinkedIn profiles. This is an inquiry only; no reply, interview, offer, confirmed project, or payment is established. Next action: wait up to 5 business days for a response, then follow up once if there is no reply. Do not send a duplicate through another channel before then.
